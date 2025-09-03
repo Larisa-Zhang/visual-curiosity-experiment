@@ -1,0 +1,25 @@
+# Node
+node_modules/
+dist/
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Large assets (keep them local; not in Git)
+models/
+images/
+public/hdrs/*.exr
+
+# Local data / outputs
+screenshots/
+wifi_*.csv
+*.zip
+*.rar
+
+# OS
+.DS_Store
+Thumbs.db

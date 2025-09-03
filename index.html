@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>3D Viewer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      overflow: hidden;
+      background-color: #000;
+      color: white;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    /* 公用按钮样式 */
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    /* 各模块位置 */
+    #module-welcome, #module-main, #module-end {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: radial-gradient(#333, #000);
+      z-index: 10;
+    }
+
+    #module-main {
+      display: none;
+      background: transparent;
+    }
+
+    #load-random-model {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- 欢迎模块 -->
+  <div id="module-welcome" style="display: flex; flex-direction: row; align-items: center; justify-content: center; height: 100vh; padding: 2rem; gap: 80px;">
+
+    <!-- 左边：说明区域 -->
+    <div style="max-width: 600px; text-align: left;">
+      <h1 style="font-size: 2.5rem;">🧠 Welcome to 3D Curiosity Explorer</h1>
+      <p style="font-size: 1.2rem; margin-top: 1rem;">
+        In this task, you will explore a series of 3D objects. Use your keyboard to rotate and inspect each one from different angles.
+      </p>
+      <p style="font-size: 1.2rem; margin-top: 1rem;">
+        A total of <strong>10 models</strong> will be shown. Afterward, you will complete a <strong>memory test</strong> to see which ones you remember.
+      </p>
+      <p style="font-size: 1.2rem; margin-top: 1rem;">
+        You can repeat the experiment as many times as you'd like.
+      </p>
+      <div style="text-align:center; margin-top: 10px;">
+      <button id="start-button" style="margin-top: 2rem; font-size: 1.2rem; padding: 10px 20px;">
+        🚀 Start Exploring
+      </button>
+      </div>
+    </div>
+
+    <!-- 右边：操作说明 -->
+    <div style="border-left: 2px solid #ccc; padding-left: 40px;">
+      <h2 style="font-size: 1.5rem;">🎮 Controls</h2>
+      <ul style="font-size: 1.1rem; list-style: none; padding-left: 0;">
+        <li>⬆️ <strong>Up Arrow</strong>: Tilt Up</li>
+        <li>⬇️ <strong>Down Arrow</strong>: Tilt Down</li>
+        <li>⬅️ <strong>Left Arrow</strong>: Rotate Left</li>
+        <li>➡️ <strong>Right Arrow</strong>: Rotate Right</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- 主交互模块 -->
+  <div id="module-main">
+    <button id="load-random-model">Load Random Model</button>
+    <div id="countdown-timer" style="
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  font-size: 16px;
+  font-family: monospace;
+  color: #222;
+  background: rgba(255,255,255,0.8);
+  padding: 5px 10px;
+  border-radius: 6px;
+">
+  60s
+</div>
+    <!-- canvas 自动由 renderer 添加 -->
+  </div>
+
+  <!-- 结束模块 -->
+  <div id="module-end" style="display: none; flex-direction: column; align-items: center; justify-content: center;">
+    <h2>Memory test</h2>
+    <div id="shown-models-list"></div>
+    <div id="shown-models-images" style="display: flex; flex-wrap: wrap; gap: 15px;"></div>
+          <div style="text-align:center; margin-top: 10px;">
+    <button id="restart-button">Start the next round</button>
+      </div>
+
+  </div>
+
+  <!-- 模块切换逻辑 -->
+  <script>
+    function switchModule(name) {
+      document.getElementById('module-welcome').style.display = (name === 'welcome') ? 'flex' : 'none';
+      document.getElementById('module-main').style.display = (name === 'main') ? 'block' : 'none';
+      document.getElementById('module-end').style.display = (name === 'end') ? 'flex' : 'none';
+    }
+
+    document.getElementById('start-button').addEventListener('click', () => {
+      switchModule('main');
+      if (window.resetMainModule) window.resetMainModule();
+      setTimeout(() => {
+        if (window.loadNextModel) window.loadNextModel();
+      }, 100); // 保证页面渲染完再开始加载模型和计时
+    });
+
+    document.getElementById('restart-button').addEventListener('click', () => {
+      
+      switchModule('main');
+      window.resetMainModule && window.resetMainModule();  // 调用重置函数
+    });
+  </script>
+
+  <!-- 启动 Three.js 主逻辑 -->
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
