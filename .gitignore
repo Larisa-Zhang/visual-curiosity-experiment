@@ -19,6 +19,9 @@ wifi_*.csv
 *.zip
 *.rar
 
+#backstage data
+record.csv
+
 # OS
 .DS_Store
 Thumbs.db
