@@ -20,7 +20,16 @@ def clear_screenshots():
 def reset_csv():
     with open(CSV_PATH, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['model', 's_t_img', 'actionId', 's_t1_img'])
+        writer.writerow([
+            'sessionId',
+            'model',
+            'actionId',
+            's_t_img',
+            's_t1_img',
+            'after_yaw','after_pitch',
+            'delta_yaw','delta_pitch',
+            'init_yaw','init_pitch'
+        ])
     print(f'✅ 重置 {CSV_PATH} 完成')
 
 # 执行清空逻辑

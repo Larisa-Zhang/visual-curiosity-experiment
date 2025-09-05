@@ -16,7 +16,16 @@ CSV_FILE = 'record.csv'
 if not os.path.exists(CSV_FILE):
     with open(CSV_FILE, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['model', 's_t_img', 'actionId', 's_t1_img'])
+        writer.writerow([
+        'sessionId',
+        'model',
+        'actionId',
+        's_t_img',
+        's_t1_img',
+        'after_yaw','after_pitch',
+        'delta_yaw','delta_pitch',
+        'init_yaw','init_pitch'   # filled on init row (actionId = -1)
+    ])
 
 @app.route('/record', methods=['POST', 'OPTIONS'])
 def record():
@@ -30,21 +39,39 @@ def record():
 
     # ✅ 正常 POST 请求
     data = request.get_json()
+    sessionId = data.get('sessionId', '')
+    after = (data.get('afterAngles') or {})
+    delta = (data.get('deltaAngles') or {})
+    initial = (data.get('initialAngles') or {})  # present only for init row
     modelName = data['modelName']
     s_t_img = data['s_t_img']
     s_t1_img = data['s_t1_img']
     actionId = data['actionId']
-    imgData1 = data['imgData1'].split(',')[1]
-    imgData2 = data['imgData2'].split(',')[1]
+    
+    if data.get('imgData1', '').startswith('data:image'):
+        imgData1 = data['imgData1'].split(',')[1]
+        with open(f'screenshots/{s_t_img}', 'wb') as f:
+            f.write(base64.b64decode(imgData1))
+    
+    if data.get('imgData2', '').startswith('data:image'):
+        imgData2 = data['imgData2'].split(',')[1]
+        with open(f'screenshots/{s_t1_img}', 'wb') as f:
+            f.write(base64.b64decode(imgData2))
 
-    with open(f'screenshots/{s_t_img}', 'wb') as f:
-        f.write(base64.b64decode(imgData1))
-    with open(f'screenshots/{s_t1_img}', 'wb') as f:
-        f.write(base64.b64decode(imgData2))
 
     with open(CSV_FILE, 'a', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow([modelName, s_t_img, actionId, s_t1_img])
+        writer.writerow([
+            sessionId,
+            modelName,
+            actionId,
+            s_t_img,
+            s_t1_img,
+            after.get('yaw'), after.get('pitch'),
+            delta.get('yaw'), delta.get('pitch'),
+            initial.get('yaw'), initial.get('pitch'),
+        ])
+
 
     # ✅ 必须添加跨域头
     response = make_response(jsonify({'status': 'ok'}))

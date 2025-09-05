@@ -1,53 +1,37 @@
-// ✅ main.js with camera-relative arrow key rotation and STL-style background
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { EXRLoader } from 'three/addons/loaders/EXRLoader.js';
 
-const modelList = [
-  'Set_10_elong_matte_2.glb',
-  'Set_10_orig_matte_0.glb',
-  'Set_12_elong_matte_2.glb',
-  'Set_12_orig_glossy_1.glb',
-  'Set_12_orig_matte_0.glb',
-  'Set_13_elong_glossy_3.glb',
-  'Set_13_orig_glossy_1.glb',
-  'Set_13_orig_matte_0.glb',
-  'Set_15_elong_glossy_3.glb',
-  'Set_15_orig_matte_0.glb',
-  'Set_16_elong_glossy_3.glb',
-  'Set_17_elong_glossy_3.glb',
-  'Set_17_orig_glossy_1.glb',
-  'Set_18_orig_glossy_1.glb',
-  'Set_18_orig_matte_0.glb',
-  'Set_19_elong_matte_2.glb',
-  'Set_19_orig_glossy_1.glb',
-  'Set_1_elong_glossy_3.glb',
-  'Set_1_orig_glossy_1.glb',
-  'Set_1_orig_matte_0.glb',
-  'Set_20_elong_matte_2.glb',
-  'Set_20_orig_glossy_1.glb',
-  'Set_20_orig_matte_0.glb',
-  'Set_2_elong_glossy_3.glb',
-  'Set_2_elong_matte_2.glb',
-  'Set_2_orig_glossy_1.glb',
-  'Set_2_orig_matte_0.glb',
-  'Set_4_elong_matte_2.glb',
-  'Set_4_orig_glossy_1.glb',
-  'Set_4_orig_matte_0.glb',
-  'Set_5_elong_glossy_3.glb',
-  'Set_5_orig_glossy_1.glb',
-  'Set_5_orig_matte_0.glb',
-  'Set_7_elong_glossy_3.glb',
-  'Set_7_orig_matte_0.glb',
-  'Set_8_elong_glossy_3.glb',
-  'Set_8_elong_matte_2.glb',
-  'Set_8_orig_glossy_1.glb',
-  'Set_8_orig_matte_0.glb',
-  'Set_9_elong_glossy_3.glb',
-  'Set_9_elong_matte_2.glb',
-  'Set_9_orig_glossy_1.glb',
-  'Set_9_orig_matte_0.glb',
-];
+// === Heatmap helpers ===
+function toDegNorm(rad) {
+  const deg = THREE.MathUtils.radToDeg(rad);
+  return (deg % 360 + 360) % 360; // 0..360
+}
+function wrap180(deg) { // 350 -> -10, 181 -> -179, etc.
+  return ((deg + 180) % 360 + 360) % 360 - 180;
+}
+// World-frame yaw/pitch (Euler order YXZ)
+function getWorldYPRDeg(obj) {
+  const q = new THREE.Quaternion();
+  obj.getWorldQuaternion(q);
+  const e = new THREE.Euler(0, 0, 0, 'YXZ'); // yaw=Y, pitch=X, roll=Z
+  e.setFromQuaternion(q, 'YXZ');
+  return { yaw: toDegNorm(e.y), pitch: toDegNorm(e.x), roll: toDegNorm(e.z) };
+}
+
+// One id to group this run
+const sessionId = `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+
+
+// 🔄 Auto-discover all GLB models under /public/models
+const modules = import.meta.glob('/public/models/*.glb', { as: 'url', eager: true });
+const discoveredModels = Object.entries(modules).map(([path, url]) => {
+  const name = path.split('/').pop(); 
+  return { name, url };                    
+});
+const nameToUrl = new Map(discoveredModels.map(m => [m.name, m.url]));
+const modelList = discoveredModels.map(m => m.name);
+
 let model = null;
 let countdown = 60;
 let countdownInterval = null;
@@ -56,6 +40,8 @@ let currentModelName = '';
 const loader = new GLTFLoader();
 let interactionCount = 0;
 const maxInteractions = 10;
+
+
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcfcfcf); 
 //scene.fog = new THREE.Fog(0x72645b, 2, 15);
@@ -72,18 +58,18 @@ function resetModelSequence() {
   currentIndex = 0;
 }
 
+// When selecting next model:
 function loadNextModel() {
-  if (currentIndex > 10) {
-    console.log('🎯 已完成 10 个模型，跳转结束界面');
-    if (window.switchModule) {
-      window.switchModule('end');
-    }
+  console.log('🎯 已完成 10 个模型，跳转结束界面');
+  if (currentIndex > 15) {
+    if (window.switchModule) window.switchModule('end');
     return;
   }
-  const nextModel = modelSequence[currentIndex];
+  const nextName = modelSequence[currentIndex];
   currentIndex++;
-  loadModel(nextModel);
+  loadModel(nextName);
 }
+
 
 // 添加 STL 风格地面
 const plane = new THREE.Mesh(
@@ -142,6 +128,7 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping; // cinematic filmic curve
 renderer.toneMappingExposure = 1.0; 
 renderer.shadowMap.enabled = true;// Shadow settings (soft, nicer looking)
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // softer edges                // adjust brightness (try 0.9–1.5)
+
 renderer.setAnimationLoop(() => {
   renderer.render(scene, camera);
 });
@@ -169,6 +156,7 @@ function hashString(str) {
   }
   return hash;
 }
+
 window.showModelList = () => {
   const listEl = document.getElementById('shown-models-list');
   const imageEl = document.getElementById('shown-models-images');
@@ -208,59 +196,85 @@ window.showModelList = () => {
     </form>
   `;
 };
-function loadModel(path) {
+
+function loadModel(name) {
+  // Remove old model(s)
   scene.children
-    .filter(obj => obj.userData.isModel)
+    .filter(obj => obj.userData?.isModel)
     .forEach(obj => scene.remove(obj));
-  currentModelName = path;
-  loader.load(`./models/${path}`, (gltf) => {
+
+  currentModelName = name;                      // <-- this is what backend will log
+  const url = nameToUrl.get(name);              // resolve the actual fetchable URL
+  if (!url) {
+    console.error('❌ URL not found for model:', name);
+    return;
+  }
+
+  loader.load(url, (gltf) => {
     model = gltf.scene;
     model.scale.set(0.5, 0.5, 0.5);
     model.position.set(0, 0, -2.5);
-    //hlutest
 
-
-    const hashX = hashString(path);
+    // (keep your deterministic starting rotation code if you like)
+    const hashX = hashString(name);
     const rotationsX = hashX % (360/5);
     const angleRadX = THREE.MathUtils.degToRad(rotationsX * 5);
 
-
-    
-    const hashY = hashString('/'+path);
+    const hashY = hashString('/' + name);
     const rotationsY = hashY % (360/5);
     const angleRadY = THREE.MathUtils.degToRad(rotationsY * 5);
 
-    model.rotation.set(angleRadX,angleRadY, 0); // 绕 Y 轴转
-    model.userData.isModel = true;
-    interactionCount++;
-    console.log(`👉 当前已交互 ${interactionCount} 次`);
+    model.rotation.set(angleRadX, angleRadY, 0);
 
+    // Cache initial Y/P and send a one-time init row (actionId = -1)
+    const init = getWorldYPRDeg(model);
+    model.userData.initialAngles = { yaw: init.yaw, pitch: init.pitch }; // (roll optional)
+
+    //send a single "init" row for this model
+    try {
+      fetch('http://127.0.0.1:5000/record', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          modelName: currentModelName,
+          actionId: -1, // marks baseline row
+          initialAngles: { yaw: init.yaw, pitch: init.pitch },
+
+          // keep screenshots fields present but empty to avoid server errors
+         s_t_img: '',
+         s_t1_img: '',
+         imgData1: 'data:image/png;base64,', // empty payloads are fine
+         imgData2: 'data:image/png;base64,'
+        })
+      });
+    } catch (e) {
+      console.warn('Init row POST failed (non-fatal):', e);
+    }
+
+   
+  
+
+    model.userData.isModel = true;
+
+    interactionCount++;
     if (interactionCount > maxInteractions) {
       interactionCount = 0;
       if (window.showModelList) window.showModelList();
-      if (window.switchModule) {
-        window.switchModule('end');
-      }
-      return;
+      if (window.switchModule) window.switchModule('end');
     }
 
-    model.traverse(obj => {
-      if (obj.isMesh) {
-        obj.castShadow = true;    // model drops shadows onto floor / itself
-        // obj.receiveShadow = true; // model can receive its own/self shadows
-      }
-    });
-
     scene.add(model);
-    console.log(`✅ 模型 ${path} 加载成功`);
     startModelTimer();
   }, undefined, (err) => {
-    console.error(`❌ 模型加载失败:`, err);
+    console.error('❌ 模型加载失败:', err);
   });
 }
 
+
 function loadRandomModel() {
-  loadNextModel();
+  const name = modelList[Math.floor(Math.random() * modelList.length)];
+  loadModel(name);
 }
 
 window.resetMainModule = () => {
@@ -274,8 +288,9 @@ function generateFilename(groupId, suffix) {
   return `${groupId}_${suffix}.png`;
 }
 
-
-function startModelTimer() {
+// sets `countdown = 10`, updates UI each second,
+// auto loads the next model when time runs out
+function startModelTimer() {  
   clearInterval(countdownInterval);
   clearTimeout(autoSwitchTimeout);
 
@@ -313,20 +328,21 @@ let isProcessing = false;
 
 async function recordStepAndAct(actionId) {
   if (!model || isProcessing) return;
-
   isProcessing = true;
+  // --- Before rotation ---
+  const before = getWorldYPRDeg(model);
 
+  // take BEFORE screenshot
   const modelName = currentModelName;
   const timestamp = Date.now();
   const rand = Math.floor(Math.random() * 1e6);
   const groupId = `${timestamp}-${rand}`;
-
-  const s_t_img = generateFilename(groupId, 'before');
+  const s_t_img = `${groupId}_before.png`;
   const imgData1 = renderer.domElement.toDataURL('image/png');
-
+  
+  // rotate by a small step
   const { cameraRight, cameraUp } = getCameraRelativeAxes();
   const step = THREE.MathUtils.degToRad(5);
-
   switch (actionId) {
     case 0: model.rotateOnWorldAxis(cameraRight, -step); break; // Up
     case 1: model.rotateOnWorldAxis(cameraRight, step); break;  // Down
@@ -336,6 +352,14 @@ async function recordStepAndAct(actionId) {
 
   await new Promise(resolve => setTimeout(resolve, 50));
 
+  // --- After rotation ---
+  const after = getWorldYPRDeg(model);
+  const delta = {
+    yaw:   wrap180(after.yaw   - before.yaw),
+    pitch: wrap180(after.pitch - before.pitch),
+  };
+
+  // take AFTER screenshot
   const s_t1_img = generateFilename(groupId, 'after');
   const imgData2 = renderer.domElement.toDataURL('image/png');
 
@@ -343,7 +367,17 @@ async function recordStepAndAct(actionId) {
     const res = await fetch('http://127.0.0.1:5000/record', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ modelName, s_t_img, s_t1_img, actionId, imgData1, imgData2 })
+      body: JSON.stringify({
+        // existing fields (unchanged)
+        modelName: currentModelName,
+        actionId,
+        s_t_img, s_t1_img, imgData1, imgData2,
+
+        // new heatmap fields
+        sessionId,
+        afterAngles: { yaw: after.yaw, pitch: after.pitch },
+        deltaAngles: { yaw: delta.yaw, pitch: delta.pitch }
+      })
     });
 
     if (!res.ok) throw new Error('Upload failed');
@@ -376,6 +410,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   resetModelSequence();
 });
+
 document.body.addEventListener('submit', (e) => {
   if (e.target.id === 'guess-form') {
     e.preventDefault();

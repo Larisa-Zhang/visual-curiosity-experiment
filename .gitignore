@@ -9,10 +9,9 @@ __pycache__/
 .venv/
 venv/
 
-# Large assets (keep them local; not in Git)
-models/
+# Large assets: glb files, backgroud image exr., quiz images
 images/
-public/hdrs/*.exr
+public/
 
 # Local data / outputs
 screenshots/
