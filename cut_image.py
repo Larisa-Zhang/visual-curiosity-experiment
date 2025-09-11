@@ -30,6 +30,6 @@ def batch_crop(input_folder, output_folder, crop_size=500):
                 print(f"⚠️ 跳过 {filename}: {e}")
 
 # 使用示例
-input_dir = "images"     # 原始 PNG 文件夹
-output_dir = "output_pngs"   # 裁剪后 PNG 文件夹
+input_dir = "./public/images"     # 原始 PNG 文件夹
+output_dir = "./public/output_pngs"   # 裁剪后 PNG 文件夹
 batch_crop(input_dir, output_dir)

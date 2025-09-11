@@ -47,16 +47,17 @@ def record():
     s_t_img = data['s_t_img']
     s_t1_img = data['s_t1_img']
     actionId = data['actionId']
-    
-    if data.get('imgData1', '').startswith('data:image'):
-        imgData1 = data['imgData1'].split(',')[1]
-        with open(f'screenshots/{s_t_img}', 'wb') as f:
-            f.write(base64.b64decode(imgData1))
-    
-    if data.get('imgData2', '').startswith('data:image'):
-        imgData2 = data['imgData2'].split(',')[1]
-        with open(f'screenshots/{s_t1_img}', 'wb') as f:
-            f.write(base64.b64decode(imgData2))
+    print(f"Saving image: {initial.get('yaw')}, {initial.get('pitch')} -> {after.get('yaw')}, {after.get('pitch')}，delta: {delta.get('yaw')}, {delta.get('pitch')}")
+    if actionId != -1:
+        if data.get('imgData1', '').startswith('data:image'):
+            imgData1 = data['imgData1'].split(',')[1]
+            with open(f'screenshots/{s_t_img}', 'wb') as f:
+                f.write(base64.b64decode(imgData1))
+        
+        if data.get('imgData2', '').startswith('data:image'):
+            imgData2 = data['imgData2'].split(',')[1]
+            with open(f'screenshots/{s_t1_img}', 'wb') as f:
+                f.write(base64.b64decode(imgData2))
 
 
     with open(CSV_FILE, 'a', newline='') as f:
@@ -79,6 +80,34 @@ def record():
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
     return response
+
+@app.route('/memory_result', methods=['POST'])
+def memory_result():
+    data = request.get_json()
+    results = data.get('results', [])
+    file_path = 'memory_test_results.csv'
+    file_exists = os.path.isfile(file_path)
+    file_is_empty = not file_exists or os.path.getsize(file_path) == 0
+    if not results:
+        return jsonify({'status': 'error', 'message': 'No results provided'}), 400
+
+
+    # 保存为 CSV（可换成你自己路径）
+    with open('memory_test_results.csv', 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        if file_is_empty:
+            writer.writerow(['timestamp', 'modelName', 'memoryTestRound', 'guessed', 'actuallySeen', 'correct'])
+        for entry in results:
+            writer.writerow([
+                entry.get('timestamp'),
+                entry.get('modelName'),
+                entry.get('memoryTestRound'),
+                entry.get('guessed'),
+                entry.get('actuallySeen'),
+                entry.get('correct')
+            ])
+
+    return jsonify({'status': 'success'}), 200
 
 if __name__ == '__main__':
     app.run(port=5000)

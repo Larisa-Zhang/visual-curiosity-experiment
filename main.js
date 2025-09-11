@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { EXRLoader } from 'three/addons/loaders/EXRLoader.js';
 
+
+
 // === Heatmap helpers ===
 function toDegNorm(rad) {
   const deg = THREE.MathUtils.radToDeg(rad);
@@ -31,26 +33,43 @@ const discoveredModels = Object.entries(modules).map(([path, url]) => {
 });
 const nameToUrl = new Map(discoveredModels.map(m => [m.name, m.url]));
 const modelList = discoveredModels.map(m => m.name);
+console.log(`✅ Discovered ${modelList.length} models:`, modelList[1]);
+
+
+
+const modules_screenshot = import.meta.glob('/public/output_pngs/*.png', { as: 'url', eager: true });
+const discoveredModels_screenshot = Object.entries(modules_screenshot).map(([path, url]) => {
+  const name = path.split('/').pop(); 
+  return { name, url };                    
+});
+const nameToUrl_screenshot = new Map(discoveredModels_screenshot.map(m => [m.name, m.url]));
+const modelList_screenshot = discoveredModels_screenshot.map(m => m.name);
+console.log(`✅ Discovered ${modelList_screenshot.length} models:`, modelList_screenshot[1]);
+
+
 
 let model = null;
-let countdown = 60;
+let countdown = 100;
 let countdownInterval = null;
 let autoSwitchTimeout = null;
 let currentModelName = '';
 const loader = new GLTFLoader();
 let interactionCount = 0;
-const maxInteractions = 10;
-
+const maxInteractions = 16;
+let memoryTestRound = 1;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcfcfcf); 
 //scene.fog = new THREE.Fog(0x72645b, 2, 15);
 let modelSequence = [];
+let seenModels = [];
+let testModels = modelList.filter(m => m.startsWith('Foil')); 
 let currentIndex = 0;
 
 function resetModelSequence() {
   // 创建一个新的随机序列
-  modelSequence = [...modelList];
+  const remainingModels = modelList.filter(m => !seenModels.includes(m) && !m.startsWith('Foil'));
+  modelSequence = [...remainingModels].slice(0, 16);
   for (let i = modelSequence.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [modelSequence[i], modelSequence[j]] = [modelSequence[j], modelSequence[i]];
@@ -59,16 +78,7 @@ function resetModelSequence() {
 }
 
 // When selecting next model:
-function loadNextModel() {
-  console.log('🎯 已完成 10 个模型，跳转结束界面');
-  if (currentIndex > 15) {
-    if (window.switchModule) window.switchModule('end');
-    return;
-  }
-  const nextName = modelSequence[currentIndex];
-  currentIndex++;
-  loadModel(nextName);
-}
+
 
 
 // 添加 STL 风格地面
@@ -162,23 +172,31 @@ window.showModelList = () => {
   const imageEl = document.getElementById('shown-models-images');
   if (!listEl || !imageEl) return;
 
-  const top10 = modelSequence.slice(0, 10); // 实际展示过的模型
-  const all10 = [...top10]; // 你也可以混合别的图形成干扰项
+  const topModels = modelSequence.slice(0, 16); // 实际展示过的模型（你展示了16个）
+  const unseenModels = modelList.filter(name => !topModels.includes(name)); // 剩下的模型
 
-  // 打乱顺序（如果你想加干扰项就 push 一些没展示过的模型）
-  for (let i = all10.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [all10[i], all10[j]] = [all10[j], all10[i]];
-  }
+  // 随机选 4 个 seen
+  const seenSubset = [...topModels]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4);
+
+  // 随机选 4 个 unseen
+  const unseenSubset = [...unseenModels]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4);
+
+  // 合并并打乱
+  const testSet = [...seenSubset, ...unseenSubset]
+    .sort(() => Math.random() - 0.5);
 
   imageEl.innerHTML = `
     <form id="guess-form">
       <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
-        ${all10.map((name, index) => {
+        ${testSet.map((name, index) => {
           const imgName = name.replace('.glb', '.png');
           return `
             <div class="guess-block" data-model="${name}" style="flex: 0 1 calc(20% - 10px); text-align: center;">
-              <img src="./images/${imgName}" style="width: 100%; max-width: 200px;" />
+              <img src="./public/output_pngs/${imgName}" style="width: 100%; max-width: 200px;" />
               <div style="margin-top: 5px;">
                 <label>
                   <input type="checkbox" name="guess-${index}" />
@@ -196,7 +214,28 @@ window.showModelList = () => {
     </form>
   `;
 };
+async function sendInitRow(name, init) {
+  try {
+    const res = await fetch('api/record', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId,
+        modelName: name,
+        actionId: -1,
+        initialAngles: { yaw: init.yaw, pitch: init.pitch },
+        s_t_img: '',
+        s_t1_img: '',
+        imgData1: 'data:image/png;base64,',
+        imgData2: 'data:image/png;base64,'
+      })
+    });
 
+    if (!res.ok) throw new Error('Upload failed');
+  } catch (e) {
+    console.warn('Init row POST failed (non-fatal):', e);
+  }
+}
 function loadModel(name) {
   // Remove old model(s)
   scene.children
@@ -212,17 +251,17 @@ function loadModel(name) {
 
   loader.load(url, (gltf) => {
     model = gltf.scene;
+    model.userData.isModel = true;
     model.scale.set(0.5, 0.5, 0.5);
     model.position.set(0, 0, -2.5);
-
     // (keep your deterministic starting rotation code if you like)
-    const hashX = hashString(name);
-    const rotationsX = hashX % (360/5);
-    const angleRadX = THREE.MathUtils.degToRad(rotationsX * 5);
+    const hashX = hashString('test'+name);
+    const rotationsX = Math.floor(hashX % (360/5)*5);
+    const angleRadX = THREE.MathUtils.degToRad(rotationsX);
 
-    const hashY = hashString('/' + name);
-    const rotationsY = hashY % (360/5);
-    const angleRadY = THREE.MathUtils.degToRad(rotationsY * 5);
+    const hashY = hashString('test/' + name);
+    const rotationsY = Math.floor(hashY % (360/5)*5);
+    const angleRadY = THREE.MathUtils.degToRad(rotationsY);
 
     model.rotation.set(angleRadX, angleRadY, 0);
 
@@ -230,56 +269,61 @@ function loadModel(name) {
     const init = getWorldYPRDeg(model);
     model.userData.initialAngles = { yaw: init.yaw, pitch: init.pitch }; // (roll optional)
 
-    //send a single "init" row for this model
-    try {
-      fetch('http://127.0.0.1:5000/record', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          modelName: currentModelName,
-          actionId: -1, // marks baseline row
-          initialAngles: { yaw: init.yaw, pitch: init.pitch },
 
-          // keep screenshots fields present but empty to avoid server errors
-         s_t_img: '',
-         s_t1_img: '',
-         imgData1: 'data:image/png;base64,', // empty payloads are fine
-         imgData2: 'data:image/png;base64,'
-        })
-      });
-    } catch (e) {
-      console.warn('Init row POST failed (non-fatal):', e);
-    }
-
-   
-  
-
+    sendInitRow(name, init); // ✅ 不需要 await，这只是 fire-and-forget
+    
     model.userData.isModel = true;
+    scene.children
+      .filter(obj => obj.userData?.isModel)
+      .forEach(obj => scene.remove(obj));
 
-    interactionCount++;
-    if (interactionCount > maxInteractions) {
-      interactionCount = 0;
-      if (window.showModelList) window.showModelList();
-      if (window.switchModule) window.switchModule('end');
-    }
-
+    
     scene.add(model);
-    startModelTimer();
   }, undefined, (err) => {
     console.error('❌ 模型加载失败:', err);
   });
 }
 
 
+//function loadRandomModel() {
+//  const name = modelList[Math.floor(Math.random() * modelList.length)];
+//  loadModel(name);
+//}
 function loadRandomModel() {
-  const name = modelList[Math.floor(Math.random() * modelList.length)];
-  loadModel(name);
+  if (currentIndex >= maxInteractions) {
+    currentIndex = 0;
+    if (window.showModelList) window.showModelList();
+    if (window.switchModule) {
+  setTimeout(() => {
+    window.switchModule('end');
+    if (window.showModelList) window.showModelList();
+    renderMemoryTest();  // ✅ 调用 memory test 展示函数
+  }, 500);
 }
+    return;
+  }
+  if (currentIndex >= modelSequence.length) {
+    console.warn("📛 modelSequence 已经全部加载完");
+    window.switchModule('model-run-out');
+    return;
+  }
+
+  const name = modelSequence[currentIndex];
+  console.warn(currentIndex, name);
+  currentIndex++;
+  countdown = 101; // reset countdown
+  updateStepCountdownUI();
+  loadModel(name);
+  seenModels.push(name);
+  console.warn(findScreenShot(name));
+}
+
 
 window.resetMainModule = () => {
   resetModelSequence();        // 重置模型顺序和 index
   interactionCount = 0;        // 重置交互次数
+  countdown = 101;             // 重置倒计时
+  updateStepCountdownUI();
   clearInterval(countdownInterval);
   clearTimeout(autoSwitchTimeout);
 };
@@ -288,31 +332,45 @@ function generateFilename(groupId, suffix) {
   return `${groupId}_${suffix}.png`;
 }
 
-// sets `countdown = 10`, updates UI each second,
-// auto loads the next model when time runs out
-function startModelTimer() {  
-  clearInterval(countdownInterval);
-  clearTimeout(autoSwitchTimeout);
+//for testing use (reveal the button temorarily)
 
-  countdown = 10;
-  updateCountdownUI();
+const TEST_MODE = true;
 
-  countdownInterval = setInterval(() => {
-    countdown--;
-    updateCountdownUI();
-    if (countdown <= 0) clearInterval(countdownInterval);
-  }, 1000);
-
-  autoSwitchTimeout = setTimeout(() => {
-    console.log("⏱️ 1分钟到，自动切换模型");
-    loadRandomModel();
-  }, 10000);
-}
-
-function updateCountdownUI() {
+function updateStepCountdownUI() {
+  const nextButton = document.getElementById('load-random-model');
+    if (TEST_MODE || countdown <= 1) {
+      nextButton.style.display = 'block';  // ✅ 显示按钮
+    } else {
+      nextButton.style.display = 'none';   // ✅ 隐藏按钮
+    }
   const el = document.getElementById('countdown-timer');
-  if (el) el.textContent = `${countdown}s`;
+  if (countdown <= 0) {
+    el.textContent = `${countdown} steps remaining`;
+    return;
+  } else {
+    countdown--;
+    if (el) el.textContent = `${countdown} steps remaining`;
+  }
 }
+
+
+//function updateStepCountdownUI() {
+  //const nextButton = document.getElementById('load-random-model');
+    //if (countdown <= 1) {
+      //nextButton.style.display = 'block';  // ✅ 显示按钮
+    //} else {
+      //nextButton.style.display = 'none';   // ✅ 隐藏按钮
+    //}
+  //const el = document.getElementById('countdown-timer');
+  //if (countdown <= 0) {
+    //el.textContent = `${countdown} steps remaining`;
+    //return;
+  //} else {
+    //countdown--;
+    //if (el) el.textContent = `${countdown} steps remaining`;
+  //}
+//}
+
 
 
 function getCameraRelativeAxes() {
@@ -328,6 +386,11 @@ let isProcessing = false;
 
 async function recordStepAndAct(actionId) {
   if (!model || isProcessing) return;
+  // Stop once steps are done
+  if (countdown <= 0) {
+    console.warn('No steps left — ignoring action.');
+    return;
+  }
   isProcessing = true;
   // --- Before rotation ---
   const before = getWorldYPRDeg(model);
@@ -364,7 +427,7 @@ async function recordStepAndAct(actionId) {
   const imgData2 = renderer.domElement.toDataURL('image/png');
 
   try {
-    const res = await fetch('http://127.0.0.1:5000/record', {
+    const res = await fetch('api/record', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -379,6 +442,7 @@ async function recordStepAndAct(actionId) {
         deltaAngles: { yaw: delta.yaw, pitch: delta.pitch }
       })
     });
+    updateStepCountdownUI()
 
     if (!res.ok) throw new Error('Upload failed');
 
@@ -400,6 +464,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
+  countdown = 100
   const button = document.getElementById('load-random-model');
   if (button) {
     button.addEventListener('click', loadRandomModel);
@@ -408,24 +473,104 @@ window.addEventListener('DOMContentLoaded', () => {
   if (button2) {
     button2.addEventListener('click', loadRandomModel);
   }
-  resetModelSequence();
+
 });
+function findScreenShot(name) {
+  // 把文件名前缀取出来（去掉 .后缀）
+  const prefix = name.split('.')[0];
+  for (let obj of modelList_screenshot) {
+    if (obj.startsWith(prefix)) {
+      return obj;
+    }
+  }
+  return null;
+}
+function renderMemoryTest() {
+  const topModels = modelSequence.slice(0, 16); // 展示过的模型
+  const unseenModels = modelList.filter(name => !topModels.includes(name)); // 没看过的
+
+  const seenSubset = [...topModels].sort(() => Math.random() - 0.5).slice(0, 4);
+  const unseenSubset = [...unseenModels].sort(() => Math.random() - 0.5).slice(0, 4);
+  const testSubSet = [...unseenModels].sort(() => Math.random() - 0.5).slice(0, 4);
+  const testSet = [...seenSubset, ...testSubSet].sort(() => Math.random() - 0.5);
+
+  const imageEl = document.getElementById('shown-models-images');
+  if (!imageEl) return;
+
+  imageEl.innerHTML = `
+    <form id="guess-form">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+        ${testSet.map((name, index) => {
+          const imgName = findScreenShot(name);
+            
+          return `
+            <div class="guess-block" data-model="${name}" style="flex: 0 1 calc(20% - 10px); text-align: center;">
+              <img src="./public/output_pngs/${imgName}" style="width: 100%; max-width: 200px;" />
+              <div style="margin-top: 5px;">
+                <label>
+                  <input type="checkbox" name="guess-${index}" />
+                  I have seen this
+                </label>
+              </div>
+              <div class="result-text" style="margin-top: 4px; height: 18px;"></div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+<div style="text-align: center; margin-top: 20px;">
+  <button type="submit" id="submit-btn" style="margin-right: 20px;">Submit</button>
+  <button type="button" id="next-memory-btn" style="display: none;">
+    ${memoryTestRound === 1 ? 'Start Next Memory Test' : 'Start Next Round'}
+  </button>
+</div>
+
+
+    </form>
+  `;
+
+  const nextBtn = document.getElementById('next-memory-btn');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      // 清除所有 checkbox 勾选
+      document.querySelectorAll('#guess-form input[type="checkbox"]').forEach(cb => cb.checked = false);
+      // 清除结果显示
+      document.querySelectorAll('.result-text').forEach(el => el.textContent = '');
+
+      console.log('✅ Memory test next button clicked');
+
+      if (memoryTestRound === 1) {
+        memoryTestRound++;
+        renderMemoryTest(); // 第二轮开始
+      } else {
+        memoryTestRound = 1;
+        switchModule('main'); // 回到主界面
+        window.resetMainModule && window.resetMainModule(); // 重置模型测试
+      }
+    });
+  }
+}
 
 document.body.addEventListener('submit', (e) => {
+  const submitBtn = document.getElementById('submit-btn');
+  const nextBtn = document.getElementById('next-memory-btn');
+
+  if (submitBtn) submitBtn.style.display = 'none';
+  if (nextBtn) nextBtn.style.display = 'inline-block';
   if (e.target.id === 'guess-form') {
     e.preventDefault();
 
-    const top10 = modelSequence.slice(0, 10); // 实际展示过的
-
     const blocks = document.querySelectorAll('.guess-block');
+    const results = [];
+
     blocks.forEach(block => {
       const modelName = block.dataset.model;
       const checkbox = block.querySelector('input[type=checkbox]');
       const resultEl = block.querySelector('.result-text');
 
       const guessed = checkbox.checked;
-      const actuallySeen = top10.includes(modelName);
+      const actuallySeen = modelSequence.includes(modelName);
 
+      // UI 显示结果
       if (guessed === actuallySeen) {
         resultEl.textContent = '✅ Correct';
         resultEl.style.color = 'green';
@@ -433,6 +578,29 @@ document.body.addEventListener('submit', (e) => {
         resultEl.textContent = '❌ Incorrect';
         resultEl.style.color = 'red';
       }
+
+
+      // ⬇️ 收集结果用于上传
+      results.push({
+        modelName,
+        guessed,
+        actuallySeen,
+        correct: guessed === actuallySeen,
+        memoryTestRound,
+        timestamp: Date.now()
+      });
+    });
+
+    // ⬆️ 发送到后端保存
+    fetch('api/memory_result', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ results })
+    }).then(res => {
+      if (!res.ok) throw new Error('Failed to save memory results');
+      console.log('✅ Memory test results uploaded');
+    }).catch(err => {
+      console.error('❌ Upload failed:', err);
     });
   }
 });

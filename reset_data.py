@@ -4,6 +4,7 @@ import csv
 # 路径配置
 SCREENSHOT_DIR = 'screenshots'
 CSV_PATH = 'record.csv'
+MEMORY_CSV_PATH = 'memory_test_results.csv'
 
 # 清空 screenshots 文件夹
 def clear_screenshots():
@@ -32,7 +33,20 @@ def reset_csv():
         ])
     print(f'✅ 重置 {CSV_PATH} 完成')
 
+def reset_memory_csv():
+    with open(MEMORY_CSV_PATH, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            'timestamp',
+            'modelName',
+            'memoryTestRound',
+            'guessed',
+            'actuallySeen',
+            'correct'
+        ])
+    print(f'✅ 重置 {MEMORY_CSV_PATH} 完成')
 # 执行清空逻辑
 if __name__ == '__main__':
     clear_screenshots()
     reset_csv()
+    reset_memory_csv()
