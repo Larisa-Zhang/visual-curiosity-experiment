@@ -1,10 +1,8 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { EXRLoader } from 'three/addons/loaders/EXRLoader.js';
-  
 
-
-// === Heatmap helpers ===
+// === Heatmap ===
 function toDegNorm(rad) {
   const deg = THREE.MathUtils.radToDeg(rad);
   return (deg % 360 + 360) % 360; // 0..360
@@ -49,7 +47,7 @@ console.log(`✅ Discovered ${modelList_screenshot.length} models:`, modelList_s
 
 
 let model = null;
-let countdown = 100;
+let countdown = 180;
 let countdownInterval = null;
 let autoSwitchTimeout = null;
 let currentModelName = '';
@@ -75,9 +73,23 @@ function resetModelSequence() {
     [modelSequence[i], modelSequence[j]] = [modelSequence[j], modelSequence[i]];
   }
   currentIndex = 0;
+  updateObjectsLeftUI();
 }
 
-// When selecting next model:
+function updateObjectsLeftUI() {
+  const el = document.getElementById('objects-left');
+  if (!el) return;
+
+  // modelSequence is your shuffled 16 for this round
+  const total = Math.min(16, modelSequence.length || 16);
+  const left = Math.max(0, total - currentIndex);
+
+  el.textContent = `${left} object${left === 1 ? '' : 's'} left`;
+  // only show during the main module
+  const mainVisible = document.getElementById('module-main')?.style.display !== 'none';
+  el.style.display = mainVisible ? 'block' : 'none';
+}
+
 
 
 
@@ -285,10 +297,7 @@ function loadModel(name) {
 }
 
 
-//function loadRandomModel() {
-//  const name = modelList[Math.floor(Math.random() * modelList.length)];
-//  loadModel(name);
-//}
+
 function loadRandomModel() {
   if (currentIndex >= maxInteractions) {
     currentIndex = 0;
@@ -305,13 +314,15 @@ function loadRandomModel() {
   if (currentIndex >= modelSequence.length) {
     console.warn("📛 modelSequence 已经全部加载完");
     window.switchModule('model-run-out');
+    
     return;
   }
 
   const name = modelSequence[currentIndex];
   console.warn(currentIndex, name);
   currentIndex++;
-  countdown = 101; // reset countdown
+  updateObjectsLeftUI();
+  countdown = 181; // reset countdown
   updateStepCountdownUI();
   loadModel(name);
   seenModels.push(name);
@@ -321,9 +332,11 @@ function loadRandomModel() {
 
 window.resetMainModule = () => {
   resetModelSequence();        // 重置模型顺序和 index
-  interactionCount = 0;        // 重置交互次数
-  countdown = 101;             // 重置倒计时
+  interactionCount = 0;
+  currentIndex = 0        // 重置交互次数
+  countdown = 181;             // 重置倒计时
   updateStepCountdownUI();
+  loadRandomModel();          // 加载第一个模型
   clearInterval(countdownInterval);
   clearTimeout(autoSwitchTimeout);
 };
@@ -332,31 +345,12 @@ function generateFilename(groupId, suffix) {
   return `${groupId}_${suffix}.png`;
 }
 
-//for testing use (reveal the button temorarily)
-
-const TEST_MODE = true;
-
-function updateStepCountdownUI() {
-  const nextButton = document.getElementById('load-random-model');
-    if (TEST_MODE || countdown <= 1) {
-      nextButton.style.display = 'block';  // ✅ 显示按钮
-    } else {
-      nextButton.style.display = 'none';   // ✅ 隐藏按钮
-    }
-  const el = document.getElementById('countdown-timer');
-  if (countdown <= 0) {
-    el.textContent = `${countdown} steps remaining`;
-    return;
-  } else {
-    countdown--;
-    if (el) el.textContent = `${countdown} steps remaining`;
-  }
-}
-
+//Test use (temporary show button)
+//const TEST_MODE = true;
 
 //function updateStepCountdownUI() {
   //const nextButton = document.getElementById('load-random-model');
-    //if (countdown <= 1) {
+    //if (TEST_MODE || countdown <= 1) {
       //nextButton.style.display = 'block';  // ✅ 显示按钮
     //} else {
       //nextButton.style.display = 'none';   // ✅ 隐藏按钮
@@ -372,6 +366,24 @@ function updateStepCountdownUI() {
 //}
 
 
+function updateStepCountdownUI() {
+  const nextButton = document.getElementById('load-random-model');
+    if (countdown <= 1) {
+      nextButton.style.display = 'block';  // ✅ 显示按钮
+    } else {
+      nextButton.style.display = 'none';   // ✅ 隐藏按钮
+    }
+  const el = document.getElementById('countdown-timer');
+  if (countdown <= 0) {
+    el.textContent = `${countdown} steps remaining`;
+    return;
+  } else {
+    countdown--;
+    if (el) el.textContent = `${countdown} steps remaining`;
+  }
+
+}
+
 
 function getCameraRelativeAxes() {
   const direction = new THREE.Vector3();
@@ -386,11 +398,7 @@ let isProcessing = false;
 
 async function recordStepAndAct(actionId) {
   if (!model || isProcessing) return;
-  // Stop once steps are done
-  if (countdown <= 0) {
-    console.warn('No steps left — ignoring action.');
-    return;
-  }
+  if (countdown <= 0) return; // no more steps allowed
   isProcessing = true;
   // --- Before rotation ---
   const before = getWorldYPRDeg(model);
@@ -401,7 +409,9 @@ async function recordStepAndAct(actionId) {
   const rand = Math.floor(Math.random() * 1e6);
   const groupId = `${timestamp}-${rand}`;
   const s_t_img = `${groupId}_before.png`;
-  const imgData1 = renderer.domElement.toDataURL('image/png');
+  //const imgData1 = renderer.domElement.toDataURL('image/jpeg', 0.6);
+  const imgData1 = "";//disable before image to save bandwidth (for human part only)
+
   
   // rotate by a small step
   const { cameraRight, cameraUp } = getCameraRelativeAxes();
@@ -424,7 +434,8 @@ async function recordStepAndAct(actionId) {
 
   // take AFTER screenshot
   const s_t1_img = generateFilename(groupId, 'after');
-  const imgData2 = renderer.domElement.toDataURL('image/png');
+  //const imgData2 = renderer.domElement.toDataURL('image/jpeg', 0.6);
+  const imgData2 = "";//disable after image to save bandwidth (for human part only)
 
   try {
     const res = await fetch('api/record', {
@@ -464,15 +475,13 @@ document.addEventListener('keydown', (event) => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-  countdown = 100
+  countdown = 180
   const button = document.getElementById('load-random-model');
   if (button) {
     button.addEventListener('click', loadRandomModel);
+    updateObjectsLeftUI();
   }
-  const button2 = document.getElementById('start-button');
-  if (button2) {
-    button2.addEventListener('click', loadRandomModel);
-  }
+
 
 });
 function findScreenShot(name) {
