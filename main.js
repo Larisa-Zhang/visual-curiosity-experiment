@@ -7,7 +7,7 @@ function toDegNorm(rad) {
   const deg = THREE.MathUtils.radToDeg(rad);
   return (deg % 360 + 360) % 360; // 0..360
 }
-function wrap180(deg) { // 350 -> -10, 181 -> -179, etc.
+function wrap180(deg) { // 350 -> -10, 91 -> -179, etc.
   return ((deg + 180) % 360 + 360) % 360 - 180;
 }
 // World-frame yaw/pitch (Euler order YXZ)
@@ -47,7 +47,7 @@ console.log(`✅ Discovered ${modelList_screenshot.length} models:`, modelList_s
 
 
 let model = null;
-let countdown = 180;
+let countdown = 90;
 let countdownInterval = null;
 let autoSwitchTimeout = null;
 let currentModelName = '';
@@ -322,7 +322,7 @@ function loadRandomModel() {
   console.warn(currentIndex, name);
   currentIndex++;
   updateObjectsLeftUI();
-  countdown = 181; // reset countdown
+  countdown = 91; // reset countdown
   updateStepCountdownUI();
   loadModel(name);
   seenModels.push(name);
@@ -334,7 +334,7 @@ window.resetMainModule = () => {
   resetModelSequence();        // 重置模型顺序和 index
   interactionCount = 0;
   currentIndex = 0        // 重置交互次数
-  countdown = 181;             // 重置倒计时
+  countdown = 91;             // 重置倒计时
   updateStepCountdownUI();
   loadRandomModel();          // 加载第一个模型
   clearInterval(countdownInterval);
@@ -346,29 +346,11 @@ function generateFilename(groupId, suffix) {
 }
 
 //Test use (temporary show button)
-//const TEST_MODE = true;
-
-//function updateStepCountdownUI() {
-  //const nextButton = document.getElementById('load-random-model');
-    //if (TEST_MODE || countdown <= 1) {
-      //nextButton.style.display = 'block';  // ✅ 显示按钮
-    //} else {
-      //nextButton.style.display = 'none';   // ✅ 隐藏按钮
-    //}
-  //const el = document.getElementById('countdown-timer');
-  //if (countdown <= 0) {
-    //el.textContent = `${countdown} steps remaining`;
-    //return;
-  //} else {
-    //countdown--;
-    //if (el) el.textContent = `${countdown} steps remaining`;
-  //}
-//}
-
+const TEST_MODE = true;
 
 function updateStepCountdownUI() {
   const nextButton = document.getElementById('load-random-model');
-    if (countdown <= 1) {
+    if (TEST_MODE || countdown <= 1) {
       nextButton.style.display = 'block';  // ✅ 显示按钮
     } else {
       nextButton.style.display = 'none';   // ✅ 隐藏按钮
@@ -381,8 +363,26 @@ function updateStepCountdownUI() {
     countdown--;
     if (el) el.textContent = `${countdown} steps remaining`;
   }
-
 }
+
+
+//function updateStepCountdownUI() {
+  //const nextButton = document.getElementById('load-random-model');
+    //if (countdown <= 1) {
+      //nextButton.style.display = 'block';  // ✅ 显示按钮
+    //} else {
+      //nextButton.style.display = 'none';   // ✅ 隐藏按钮
+    //}
+  //const el = document.getElementById('countdown-timer');
+  //if (countdown <= 0) {
+    //el.textContent = `${countdown} steps remaining`;
+    //return;
+  //} else {
+    //countdown--;
+    //if (el) el.textContent = `${countdown} steps remaining`;
+  //}
+
+//}
 
 
 function getCameraRelativeAxes() {
@@ -465,17 +465,37 @@ async function recordStepAndAct(actionId) {
   }
 }
 
-document.addEventListener('keydown', (event) => {
-  switch (event.key) {
-    case 'ArrowUp': recordStepAndAct(0); break;
-    case 'ArrowDown': recordStepAndAct(1); break;
-    case 'ArrowLeft': recordStepAndAct(2); break;
+//document.addEventListener('keydown', (event) => {
+  //switch (event.key) {
+    //case 'ArrowUp': recordStepAndAct(0); break;
+    //case 'ArrowDown': recordStepAndAct(1); break;
+    //case 'ArrowLeft': recordStepAndAct(2); break;
+    //case 'ArrowRight': recordStepAndAct(3); break;
+  //}
+//});
+
+// 1) Stop default behavior but do NOT act on keydown
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    e.preventDefault();
+    // Ignore repeats so holding the key doesn't cause any extra work
+    if (e.repeat) return;
+  }
+});
+
+// 2) Only register the action when the key is released
+document.addEventListener('keyup', (e) => {
+  switch (e.key) {
+    case 'ArrowUp':    recordStepAndAct(0); break;
+    case 'ArrowDown':  recordStepAndAct(1); break;
+    case 'ArrowLeft':  recordStepAndAct(2); break;
     case 'ArrowRight': recordStepAndAct(3); break;
   }
 });
 
+
 window.addEventListener('DOMContentLoaded', () => {
-  countdown = 180
+  countdown = 90
   const button = document.getElementById('load-random-model');
   if (button) {
     button.addEventListener('click', loadRandomModel);
