@@ -25,3 +25,4 @@ record.csv
 # OS
 .DS_Store
 Thumbs.db
+/images
