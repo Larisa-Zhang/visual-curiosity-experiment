@@ -13,7 +13,7 @@ def crop_center(img, crop_size=500):
     bottom = top + crop_size
     return img.crop((left, top, right, bottom))
 
-def batch_crop(input_folder, output_folder, crop_size=500):
+def batch_crop(input_folder, output_folder, crop_size=700):
     os.makedirs(output_folder, exist_ok=True)
 
     for filename in os.listdir(input_folder):
