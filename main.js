@@ -400,6 +400,8 @@ async function recordStepAndAct(actionId) {
   if (!model || isProcessing) return;
   if (countdown <= 0) return; // no more steps allowed
   isProcessing = true;
+  //timestamps
+  const t_start_ms = Date.now();
   // --- Before rotation ---
   const before = getWorldYPRDeg(model);
 
@@ -437,6 +439,10 @@ async function recordStepAndAct(actionId) {
   //const imgData2 = renderer.domElement.toDataURL('image/jpeg', 0.6);
   const imgData2 = "";//disable after image to save bandwidth (for human part only)
 
+  // action end timestamp + duration
+  const t_end_ms = Date.now();
+  const duration_ms = t_end_ms - t_start_ms;
+
   try {
     const res = await fetch('api/record', {
       method: 'POST',
@@ -446,11 +452,14 @@ async function recordStepAndAct(actionId) {
         modelName: currentModelName,
         actionId,
         s_t_img, s_t1_img, imgData1, imgData2,
-
-        // new heatmap fields
+        // heatmap fields
         sessionId,
         afterAngles: { yaw: after.yaw, pitch: after.pitch },
-        deltaAngles: { yaw: delta.yaw, pitch: delta.pitch }
+        deltaAngles: { yaw: delta.yaw, pitch: delta.pitch },
+        // timestamp fields
+        t_start_ms,
+        t_end_ms,
+        duration_ms
       })
     });
     updateStepCountdownUI()

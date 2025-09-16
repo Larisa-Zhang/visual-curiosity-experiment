@@ -3,6 +3,7 @@ from flask_cors import CORS
 import base64
 import os
 import csv
+import time
 
 app = Flask(__name__)
 
@@ -25,6 +26,7 @@ if not os.path.exists(CSV_FILE):
         'after_yaw','after_pitch',
         'delta_yaw','delta_pitch',
         'init_yaw','init_pitch'   # filled on init row (actionId = -1)
+        't_start_ms','t_end_ms','duration_ms','server_received_ms'
     ])
 
 @app.route('/record', methods=['POST', 'OPTIONS'])
@@ -47,6 +49,11 @@ def record():
     s_t_img = data['s_t_img']
     s_t1_img = data['s_t1_img']
     actionId = data['actionId']
+    t_start_ms = data.get('t_start_ms')
+    t_end_ms = data.get('t_end_ms')
+    duration_ms = data.get('duration_ms')
+    server_received_ms = int(time.time() * 1000)
+    
     print(f"Saving image: {initial.get('yaw')}, {initial.get('pitch')} -> {after.get('yaw')}, {after.get('pitch')}，delta: {delta.get('yaw')}, {delta.get('pitch')}")
     if actionId != -1:
         if data.get('imgData1', '').startswith('data:image'):
@@ -71,6 +78,7 @@ def record():
             after.get('yaw'), after.get('pitch'),
             delta.get('yaw'), delta.get('pitch'),
             initial.get('yaw'), initial.get('pitch'),
+            t_start_ms, t_end_ms, duration_ms, server_received_ms
         ])
 
 
