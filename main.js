@@ -208,7 +208,7 @@ window.showModelList = () => {
           const imgName = name.replace('.glb', '.png');
           return `
             <div class="guess-block" data-model="${name}" style="flex: 0 1 calc(20% - 10px); text-align: center;">
-              <img src="./public/output_pngs/${imgName}" style="width: 100%; max-width: 200px;" />
+              <img src="./public/output_pngs/${imgName}" style="width: 100%; max-width: 400px;" />
               <div style="margin-top: 5px;">
                 <label>
                   <input type="checkbox" name="guess-${index}" />
@@ -534,7 +534,7 @@ function renderMemoryTest() {
             
           return `
             <div class="guess-block" data-model="${name}" style="flex: 0 1 calc(20% - 10px); text-align: center;">
-              <img src="./public/output_pngs/${imgName}" style="width: 100%; max-width: 200px;" />
+              <img src="./public/output_pngs/${imgName}" style="width: 100%; max-width: 400px;" />
               <div style="margin-top: 5px;">
                 <label>
                   <input type="checkbox" name="guess-${index}" />
