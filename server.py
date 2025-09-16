@@ -92,6 +92,7 @@ def record():
 @app.route('/memory_result', methods=['POST'])
 def memory_result():
     data = request.get_json()
+    sessionId = data.get('sessionId', '')
     results = data.get('results', [])
     file_path = 'memory_test_results.csv'
     file_exists = os.path.isfile(file_path)
@@ -107,6 +108,7 @@ def memory_result():
             writer.writerow(['timestamp', 'modelName', 'memoryTestRound', 'guessed', 'actuallySeen', 'correct'])
         for entry in results:
             writer.writerow([
+                sessionId,
                 entry.get('timestamp'),
                 entry.get('modelName'),
                 entry.get('memoryTestRound'),

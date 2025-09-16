@@ -30,7 +30,7 @@ def reset_csv():
             'after_yaw','after_pitch',
             'delta_yaw','delta_pitch',
             'init_yaw','init_pitch',
-            t_start_ms','t_end_ms','duration_ms','server_received_ms'
+            't_start_ms','t_end_ms','duration_ms','server_received_ms'
         ])
     print(f'✅ 重置 {CSV_PATH} 完成')
 
@@ -38,6 +38,7 @@ def reset_memory_csv():
     with open(MEMORY_CSV_PATH, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow([
+            'sessionId'
             'timestamp',
             'modelName',
             'memoryTestRound',

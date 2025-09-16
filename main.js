@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { EXRLoader } from 'three/addons/loaders/EXRLoader.js';
 
+
 // === Heatmap ===
 function toDegNorm(rad) {
   const deg = THREE.MathUtils.radToDeg(rad);
@@ -19,8 +20,31 @@ function getWorldYPRDeg(obj) {
   return { yaw: toDegNorm(e.y), pitch: toDegNorm(e.x), roll: toDegNorm(e.z) };
 }
 
-// One id to group this run
-const sessionId = `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+// One id to group this run const sessionId = ${Date.now()}-${Math.floor(Math.random() * 1e6)}; 
+//const sessionId = getOrCreateSessionId();
+//preset sessioNid IN CODE: const sessionId = "UoA_Exp1_P001";
+
+// One id to group this run (persistent across the whole experiment)
+let sessionId = localStorage.getItem('sessionId') || `RUN-${Date.now()}`;
+localStorage.setItem('sessionId', sessionId);
+
+function getOrCreateSessionId() {
+  let id = localStorage.getItem('sessionId');
+  if (!id) {
+    // Ask experimenter or participant
+    id = prompt("Enter Session ID (e.g., P001, TestA, etc.):");
+    if (!id) {
+      // fallback if user just presses cancel
+      id = `run-${Date.now()}`;
+    }
+    localStorage.setItem('sessionId', id);
+  }
+  return id;
+}
+
+
+
+
 
 
 // 🔄 Auto-discover all GLB models under /public/models
@@ -448,12 +472,11 @@ async function recordStepAndAct(actionId) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        // existing fields (unchanged)
+        sessionId,
         modelName: currentModelName,
         actionId,
         s_t_img, s_t1_img, imgData1, imgData2,
         // heatmap fields
-        sessionId,
         afterAngles: { yaw: after.yaw, pitch: after.pitch },
         deltaAngles: { yaw: delta.yaw, pitch: delta.pitch },
         // timestamp fields
@@ -633,7 +656,7 @@ document.body.addEventListener('submit', (e) => {
     fetch('api/memory_result', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ results })
+      body: JSON.stringify({ sessionId, results })
     }).then(res => {
       if (!res.ok) throw new Error('Failed to save memory results');
       console.log('✅ Memory test results uploaded');
