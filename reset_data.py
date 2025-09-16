@@ -29,7 +29,8 @@ def reset_csv():
             's_t1_img',
             'after_yaw','after_pitch',
             'delta_yaw','delta_pitch',
-            'init_yaw','init_pitch'
+            'init_yaw','init_pitch',
+            t_start_ms','t_end_ms','duration_ms','server_received_ms'
         ])
     print(f'✅ 重置 {CSV_PATH} 完成')
 
