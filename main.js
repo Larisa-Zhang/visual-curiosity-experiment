@@ -20,9 +20,95 @@ function getWorldYPRDeg(obj) {
   return { yaw: toDegNorm(e.y), pitch: toDegNorm(e.x), roll: toDegNorm(e.z) };
 }
 
-// One id to group this run const sessionId = ${Date.now()}-${Math.floor(Math.random() * 1e6)}; 
-//const sessionId = getOrCreateSessionId();
-//preset sessioNid IN CODE: const sessionId = "UoA_Exp1_P001";
+
+/* =========================
+   YPR CONTROL (new)
+   - setWorldYPR(): set object's WORLD yaw/pitch/roll (deg)
+   - makeYPRPanel(): small UI panel (Apply + A/B roll toggle)
+   - 'L' key: quick prompt for yaw,pitch,roll
+========================= */
+const d2r = THREE.MathUtils.degToRad;
+
+function quatFromYPRDeg(yawDeg, pitchDeg, rollDeg) {
+  const e = new THREE.Euler(d2r(pitchDeg), d2r(yawDeg), d2r(rollDeg), 'YXZ');
+  const q = new THREE.Quaternion();
+  q.setFromEuler(e);
+  return q;
+}
+
+function setWorldYPR(obj, yawDeg, pitchDeg, rollDeg) {
+  const qTargetWorld = quatFromYPRDeg(yawDeg, pitchDeg, rollDeg);
+  const qParentWorld = new THREE.Quaternion();
+  if (obj.parent) obj.parent.getWorldQuaternion(qParentWorld);
+  const qLocal = qParentWorld.clone().invert().multiply(qTargetWorld);
+  obj.quaternion.copy(qLocal);
+}
+
+// build once
+let __yprPanelBuilt = false;
+function makeYPRPanel(targetObj) {
+  if (__yprPanelBuilt) return;
+  __yprPanelBuilt = true;
+
+  const panel = document.createElement('div');
+  panel.style.cssText = `
+    position:fixed; top:12px; left:12px; z-index:9999;
+    background:#111c; color:#fff; padding:10px 12px; border-radius:10px;
+    font:12px/1.2 system-ui, sans-serif; backdrop-filter: blur(6px);
+    display:flex; gap:8px; align-items:center;
+  `;
+  panel.innerHTML = `
+    <span style="opacity:.8">Yaw:</span><input id="y_in" type="number" value="0" step="1" style="width:60px">
+    <span style="opacity:.8">Pitch:</span><input id="p_in" type="number" value="0" step="1" style="width:60px">
+    <span style="opacity:.8">Roll:</span><input id="r_in" type="number" value="0" step="1" style="width:60px">
+    <button id="apply_btn">Apply</button>
+    <span style="margin-left:6px; opacity:.8">A/B Roll:</span>
+    <input id="rA_in" type="number" value="0" step="1" style="width:60px">
+    <input id="rB_in" type="number" value="90" step="1" style="width:60px">
+    <button id="toggle_btn">Toggle</button>
+  `;
+  document.body.appendChild(panel);
+
+  const yawEl   = panel.querySelector('#y_in');
+  const pitchEl = panel.querySelector('#p_in');
+  const rollEl  = panel.querySelector('#r_in');
+  const rAEl    = panel.querySelector('#rA_in');
+  const rBEl    = panel.querySelector('#rB_in');
+
+  panel.querySelector('#apply_btn').onclick = () => {
+    const yaw = parseFloat(yawEl.value) || 0;
+    const pitch = parseFloat(pitchEl.value) || 0;
+    const roll = parseFloat(rollEl.value) || 0;
+    if (targetObj) setWorldYPR(targetObj, yaw, pitch, roll);
+  };
+
+  let useA = true;
+  panel.querySelector('#toggle_btn').onclick = () => {
+    const yaw = parseFloat(yawEl.value) || 0;
+    const pitch = parseFloat(pitchEl.value) || 0;
+    const rA = parseFloat(rAEl.value) || 0;
+    const rB = parseFloat(rBEl.value) || 0;
+    const r = useA ? rA : rB;
+    if (targetObj) setWorldYPR(targetObj, yaw, pitch, r);
+    rollEl.value = r;
+    useA = !useA;
+  };
+
+  // keep the panel from stealing arrow keys focus
+  panel.addEventListener('focusin', () => renderer?.domElement?.focus?.());
+}
+
+window.addEventListener('keydown', (e) => {
+  if (e.key.toLowerCase() === 'l' && model) {
+    const s = prompt('Enter yaw,pitch,roll (deg):', '0,0,0');
+    if (!s) return;
+    const [yaw, pitch, roll] = s.split(',').map(v => parseFloat(v.trim()) || 0);
+    setWorldYPR(model, yaw, pitch, roll);
+  }
+});
+/* ===== end YPR CONTROL ===== */
+
+
 
 // One id to group this run (persistent across the whole experiment)
 let sessionId = localStorage.getItem('sessionId') || `RUN-${Date.now()}`;
@@ -44,34 +130,29 @@ function getOrCreateSessionId() {
 
 
 
-
-
-
 // 🔄 Auto-discover all GLB models under /public/models
 const modules = import.meta.glob('/public/models/*.glb', { as: 'url', eager: true });
 const discoveredModels = Object.entries(modules).map(([path, url]) => {
-  const name = path.split('/').pop(); 
-  return { name, url };                    
+  const name = path.split('/').pop();
+  return { name, url };
 });
 const nameToUrl = new Map(discoveredModels.map(m => [m.name, m.url]));
 const modelList = discoveredModels.map(m => m.name);
 console.log(`✅ Discovered ${modelList.length} models:`, modelList[1]);
 
 
-
 const modules_screenshot = import.meta.glob('/public/output_pngs/*.png', { as: 'url', eager: true });
 const discoveredModels_screenshot = Object.entries(modules_screenshot).map(([path, url]) => {
-  const name = path.split('/').pop(); 
-  return { name, url };                    
+  const name = path.split('/').pop();
+  return { name, url };
 });
 const nameToUrl_screenshot = new Map(discoveredModels_screenshot.map(m => [m.name, m.url]));
 const modelList_screenshot = discoveredModels_screenshot.map(m => m.name);
 console.log(`✅ Discovered ${modelList_screenshot.length} models:`, modelList_screenshot[1]);
 
 
-
 let model = null;
-let countdown = 90;
+let countdown = 1000000000;
 let countdownInterval = null;
 let autoSwitchTimeout = null;
 let currentModelName = '';
@@ -81,12 +162,17 @@ const maxInteractions = 16;
 let memoryTestRound = 1;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xcfcfcf); 
+scene.background = new THREE.Color(0xcfcfcf);
 //scene.fog = new THREE.Fog(0x72645b, 2, 15);
 let modelSequence = [];
 let seenModels = [];
-let testModels = modelList.filter(m => m.startsWith('Foil')); 
+let testModels = modelList.filter(m => m.startsWith('Foil'));
 let currentIndex = 0;
+
+//Show an axes helper on the model and update the HUD
+let axesHelper = null;
+let showAxes = false;
+let lastDeltaForHud = { yaw: null, pitch: null, roll: null };
 
 function resetModelSequence() {
   // 创建一个新的随机序列
@@ -113,7 +199,6 @@ function updateObjectsLeftUI() {
   const mainVisible = document.getElementById('module-main')?.style.display !== 'none';
   el.style.display = mainVisible ? 'block' : 'none';
 }
-
 
 
 
@@ -169,13 +254,35 @@ camera.position.set(0, 0, 1);
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });//antialias: true (smooth jaggies)
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+renderer.domElement.tabIndex = 0;
+renderer.domElement.style.outline = 'none'; // purely cosmetic
 renderer.outputColorSpace = THREE.SRGBColorSpace;   // correct gamma curve for displays
 renderer.toneMapping = THREE.ACESFilmicToneMapping; // cinematic filmic curve
-renderer.toneMappingExposure = 1.0; 
+renderer.toneMappingExposure = 1.0;
 renderer.shadowMap.enabled = true;// Shadow settings (soft, nicer looking)
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // softer edges                // adjust brightness (try 0.9–1.5)
 
 renderer.setAnimationLoop(() => {
+  // live angles HUD
+  if (showAxes && model) {
+    const ang = getWorldYPRDeg(model);
+    const yawEl   = document.getElementById('hud-yaw');
+    const pitchEl = document.getElementById('hud-pitch');
+    const rollEl  = document.getElementById('hud-roll');
+    const dyEl    = document.getElementById('hud-dyaw');
+    const dpEl    = document.getElementById('hud-dpitch');
+    const drEl    = document.getElementById('hud-droll');
+
+    if (yawEl)   yawEl.textContent   = ang.yaw.toFixed(2);
+    if (pitchEl) pitchEl.textContent = ang.pitch.toFixed(2);
+    if (rollEl)  rollEl.textContent  = ang.roll.toFixed(2);
+
+    if (dyEl && lastDeltaForHud.yaw   !== null) dyEl.textContent = lastDeltaForHud.yaw.toFixed(2);
+    if (dpEl && lastDeltaForHud.pitch !== null) dpEl.textContent = lastDeltaForHud.pitch.toFixed(2);
+    if (drEl && lastDeltaForHud.roll  !== null) drEl.textContent = lastDeltaForHud.roll.toFixed(2); // ✅ fixed
+  }
+
   renderer.render(scene, camera);
 });
 
@@ -272,6 +379,8 @@ async function sendInitRow(name, init) {
     console.warn('Init row POST failed (non-fatal):', e);
   }
 }
+
+
 function loadModel(name) {
   // Remove old model(s)
   scene.children
@@ -290,7 +399,7 @@ function loadModel(name) {
     model.userData.isModel = true;
     model.scale.set(0.5, 0.5, 0.5);
     model.position.set(0, 0, -2.5);
-    // (keep your deterministic starting rotation code if you like)
+    // (keep your deterministic starting code if you like)
     const hashX = hashString('test'+name);
     const rotationsX = Math.floor(hashX % (360/5)*5);
     const angleRadX = THREE.MathUtils.degToRad(rotationsX);
@@ -305,16 +414,30 @@ function loadModel(name) {
     const init = getWorldYPRDeg(model);
     model.userData.initialAngles = { yaw: init.yaw, pitch: init.pitch }; // (roll optional)
 
-
     sendInitRow(name, init); // ✅ 不需要 await，这只是 fire-and-forget
-    
-    model.userData.isModel = true;
+
     scene.children
       .filter(obj => obj.userData?.isModel)
       .forEach(obj => scene.remove(obj));
 
-    
     scene.add(model);
+
+    // --- ✅ axes helper (object-local), sized to model, always on top ---
+    model.updateWorldMatrix(true, true);
+    const box = new THREE.Box3().setFromObject(model);
+    const sz = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(sz.x, sz.y, sz.z) || 1;
+    const axesLen = Math.max(1, maxDim * 0.8);
+    axesHelper = new THREE.AxesHelper(axesLen);
+    axesHelper.renderOrder = 9999;
+    const mats = Array.isArray(axesHelper.material) ? axesHelper.material : [axesHelper.material];
+    mats.forEach(m => { if (m) m.depthTest = false; });
+    model.add(axesHelper);
+    axesHelper.visible = showAxes;
+
+    // --- ✅ build YPR panel once (points to current `model`) ---
+    makeYPRPanel(model);
+
   }, undefined, (err) => {
     console.error('❌ 模型加载失败:', err);
   });
@@ -327,18 +450,18 @@ function loadRandomModel() {
     currentIndex = 0;
     if (window.showModelList) window.showModelList();
     if (window.switchModule) {
-  setTimeout(() => {
-    window.switchModule('end');
-    if (window.showModelList) window.showModelList();
-    renderMemoryTest();  // ✅ 调用 memory test 展示函数
-  }, 500);
-}
+      setTimeout(() => {
+        window.switchModule('end');
+        if (window.showModelList) window.showModelList();
+        renderMemoryTest();  // ✅ 调用 memory test 展示函数
+      }, 500);
+    }
     return;
   }
   if (currentIndex >= modelSequence.length) {
     console.warn("📛 modelSequence 已经全部加载完");
     window.switchModule('model-run-out');
-    
+
     return;
   }
 
@@ -346,7 +469,7 @@ function loadRandomModel() {
   console.warn(currentIndex, name);
   currentIndex++;
   updateObjectsLeftUI();
-  countdown = 91; // reset countdown
+  countdown =10000001; // reset countdown
   updateStepCountdownUI();
   loadModel(name);
   seenModels.push(name);
@@ -358,7 +481,7 @@ window.resetMainModule = () => {
   resetModelSequence();        // 重置模型顺序和 index
   interactionCount = 0;
   currentIndex = 0        // 重置交互次数
-  countdown = 91;             // 重置倒计时
+  countdown = 10000001;             // 重置倒计时
   updateStepCountdownUI();
   loadRandomModel();          // 加载第一个模型
   clearInterval(countdownInterval);
@@ -374,11 +497,11 @@ const TEST_MODE = true;
 
 function updateStepCountdownUI() {
   const nextButton = document.getElementById('load-random-model');
-    if (TEST_MODE || countdown <= 1) {
-      nextButton.style.display = 'block';  // ✅ 显示按钮
-    } else {
-      nextButton.style.display = 'none';   // ✅ 隐藏按钮
-    }
+  if (countdown <= 1) {
+    nextButton.style.display = 'block';  // ✅ 显示按钮
+  } else {
+    nextButton.style.display = 'none';   // ✅ 隐藏按钮
+  }
   const el = document.getElementById('countdown-timer');
   if (countdown <= 0) {
     el.textContent = `${countdown} steps remaining`;
@@ -387,26 +510,8 @@ function updateStepCountdownUI() {
     countdown--;
     if (el) el.textContent = `${countdown} steps remaining`;
   }
+
 }
-
-
-//function updateStepCountdownUI() {
-  //const nextButton = document.getElementById('load-random-model');
-    //if (countdown <= 1) {
-      //nextButton.style.display = 'block';  // ✅ 显示按钮
-    //} else {
-      //nextButton.style.display = 'none';   // ✅ 隐藏按钮
-    //}
-  //const el = document.getElementById('countdown-timer');
-  //if (countdown <= 0) {
-    //el.textContent = `${countdown} steps remaining`;
-    //return;
-  //} else {
-    //countdown--;
-    //if (el) el.textContent = `${countdown} steps remaining`;
-  //}
-
-//}
 
 
 function getCameraRelativeAxes() {
@@ -422,52 +527,54 @@ let isProcessing = false;
 
 async function recordStepAndAct(actionId) {
   if (!model || isProcessing) return;
-  if (countdown <= 0) return; // no more steps allowed
+  if (countdown <= 0) return;
   isProcessing = true;
-  //timestamps
-  const t_start_ms = Date.now();
-  // --- Before rotation ---
-  const before = getWorldYPRDeg(model);
-
-  // take BEFORE screenshot
-  const modelName = currentModelName;
-  const timestamp = Date.now();
-  const rand = Math.floor(Math.random() * 1e6);
-  const groupId = `${timestamp}-${rand}`;
-  const s_t_img = `${groupId}_before.png`;
-  //const imgData1 = renderer.domElement.toDataURL('image/jpeg', 0.6);
-  const imgData1 = "";//disable before image to save bandwidth (for human part only)
-
-  
-  // rotate by a small step
-  const { cameraRight, cameraUp } = getCameraRelativeAxes();
-  const step = THREE.MathUtils.degToRad(5);
-  switch (actionId) {
-    case 0: model.rotateOnWorldAxis(cameraRight, -step); break; // Up
-    case 1: model.rotateOnWorldAxis(cameraRight, step); break;  // Down
-    case 2: model.rotateOnWorldAxis(cameraUp, -step); break;    // Left
-    case 3: model.rotateOnWorldAxis(cameraUp, step); break;     // Right
-  }
-
-  await new Promise(resolve => setTimeout(resolve, 50));
-
-  // --- After rotation ---
-  const after = getWorldYPRDeg(model);
-  const delta = {
-    yaw:   wrap180(after.yaw   - before.yaw),
-    pitch: wrap180(after.pitch - before.pitch),
-  };
-
-  // take AFTER screenshot
-  const s_t1_img = generateFilename(groupId, 'after');
-  //const imgData2 = renderer.domElement.toDataURL('image/jpeg', 0.6);
-  const imgData2 = "";//disable after image to save bandwidth (for human part only)
-
-  // action end timestamp + duration
-  const t_end_ms = Date.now();
-  const duration_ms = t_end_ms - t_start_ms;
 
   try {
+    const t_start_ms = Date.now();
+
+    // BEFORE
+    const before = getWorldYPRDeg(model);
+
+    // BEFORE screenshot (disabled)
+    const modelName = currentModelName;
+    const timestamp = Date.now();
+    const rand = Math.floor(Math.random() * 1e6);
+    const groupId = `${timestamp}-${rand}`;
+    const s_t_img = `${groupId}_before.png`;
+    const imgData1 = "";
+
+    // ROTATE
+    const { cameraRight, cameraUp } = getCameraRelativeAxes();
+    const step = THREE.MathUtils.degToRad(5);
+    switch (actionId) {
+      case 0: model.rotateOnWorldAxis(cameraRight, -step); break; // Up
+      case 1: model.rotateOnWorldAxis(cameraRight,  step); break; // Down
+      case 2: model.rotateOnWorldAxis(cameraUp,    -step); break; // Left
+      case 3: model.rotateOnWorldAxis(cameraUp,     step); break; // Right
+    }
+
+    await new Promise(r => setTimeout(r, 50));
+
+    // AFTER
+    const after = getWorldYPRDeg(model);
+    const delta = {
+      yaw:   wrap180(after.yaw   - before.yaw),
+      pitch: wrap180(after.pitch - before.pitch),
+      roll:  wrap180(after.roll  - before.roll) // optional: track roll delta too
+    };
+
+    // ✅ update HUD delta here
+    lastDeltaForHud = { yaw: delta.yaw, pitch: delta.pitch, roll: delta.roll };
+
+    // AFTER screenshot (disabled)
+    const s_t1_img = `${groupId}_after.png`;
+    const imgData2 = "";
+
+    const t_end_ms = Date.now();
+    const duration_ms = t_end_ms - t_start_ms;
+
+    // POST
     const res = await fetch('api/record', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -476,47 +583,27 @@ async function recordStepAndAct(actionId) {
         modelName: currentModelName,
         actionId,
         s_t_img, s_t1_img, imgData1, imgData2,
-        // heatmap fields
         afterAngles: { yaw: after.yaw, pitch: after.pitch },
         deltaAngles: { yaw: delta.yaw, pitch: delta.pitch },
-        // timestamp fields
-        t_start_ms,
-        t_end_ms,
-        duration_ms
+        t_start_ms, t_end_ms, duration_ms
       })
     });
-    updateStepCountdownUI()
 
+    updateStepCountdownUI();
     if (!res.ok) throw new Error('Upload failed');
 
     console.log(`✅ Recorded: ${modelName}, ${s_t_img}, ${actionId}, ${s_t1_img}`);
   } catch (e) {
-    console.error('❌ Recording failed:', e);
+    console.error('❌ recordStepAndAct error:', e);
   } finally {
-    isProcessing = false;  // 解锁
+    // ✅ always clear lock so keys work again even after an error
+    isProcessing = false;
   }
 }
 
-//document.addEventListener('keydown', (event) => {
-  //switch (event.key) {
-    //case 'ArrowUp': recordStepAndAct(0); break;
-    //case 'ArrowDown': recordStepAndAct(1); break;
-    //case 'ArrowLeft': recordStepAndAct(2); break;
-    //case 'ArrowRight': recordStepAndAct(3); break;
-  //}
-//});
-
-// 1) Stop default behavior but do NOT act on keydown
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-    e.preventDefault();
-    // Ignore repeats so holding the key doesn't cause any extra work
-    if (e.repeat) return;
-  }
-});
 
 // 2) Only register the action when the key is released
-document.addEventListener('keyup', (e) => {
+document.addEventListener('keydown', (e) => {
   switch (e.key) {
     case 'ArrowUp':    recordStepAndAct(0); break;
     case 'ArrowDown':  recordStepAndAct(1); break;
@@ -527,15 +614,29 @@ document.addEventListener('keyup', (e) => {
 
 
 window.addEventListener('DOMContentLoaded', () => {
-  countdown = 90
+  countdown = 1000000000
   const button = document.getElementById('load-random-model');
   if (button) {
     button.addEventListener('click', loadRandomModel);
     updateObjectsLeftUI();
   }
 
+  const chk = document.getElementById('show-axes');
+  const hud = document.getElementById('angles-hud');
+  if (chk && hud) {
+    chk.addEventListener('change', () => {
+      showAxes = chk.checked;
+      hud.style.display = showAxes ? 'block' : 'none';
+      if (axesHelper) axesHelper.visible = showAxes;
 
+      // ✅ give the keyboard back to the canvas so Arrow keys keep working
+      chk.blur();
+      renderer.domElement.focus();
+    });
+  }
 });
+
+
 function findScreenShot(name) {
   // 把文件名前缀取出来（去掉 .后缀）
   const prefix = name.split('.')[0];
@@ -563,7 +664,7 @@ function renderMemoryTest() {
       <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
         ${testSet.map((name, index) => {
           const imgName = findScreenShot(name);
-            
+
           return `
             <div class="guess-block" data-model="${name}" style="flex: 0 1 calc(20% - 10px); text-align: center;">
               <img src="./public/output_pngs/${imgName}" style="width: 100%; max-width: 400px;" />

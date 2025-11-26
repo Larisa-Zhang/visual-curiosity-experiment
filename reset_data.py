@@ -38,7 +38,7 @@ def reset_memory_csv():
     with open(MEMORY_CSV_PATH, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow([
-            'sessionId'
+            'sessionId',
             'timestamp',
             'modelName',
             'memoryTestRound',

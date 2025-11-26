@@ -57,7 +57,7 @@
 </head>
 <body>
 
-    <!-- 欢迎模块 -->
+  <!-- 欢迎模块 -->
   <div id="module-welcome" style="display: flex; flex-direction: row; align-items: center; justify-content: center; height: 100vh; padding: 2rem; gap: 80px;">
 
     <!-- 左边：说明区域 -->
@@ -74,9 +74,9 @@
       <input id="session-input" placeholder="Insert participant ID (e.g., uoa_exp1_p001)"
        style="margin-bottom:10px; padding:8px; width:320px; font-size:14px" />
       <div style="text-align:center; margin-top: 10px;">
-      <button id="start-button" style="margin-top: 2rem; font-size: 1.2rem; padding: 10px 20px;">
-        🚀 Start Exploring
-      </button>
+        <button id="start-button" style="margin-top: 2rem; font-size: 1.2rem; padding: 10px 20px;">
+          🚀 Start Exploring
+        </button>
       </div>
     </div>
 
@@ -96,29 +96,56 @@
   <!-- 主交互模块 -->
   <div id="module-main">
     <button id="load-random-model">Load Next Model</button>
-    <div id="countdown-timer" style="
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  font-size: 16px;
-  font-family: monospace;
-  color: #222;
-  background: rgba(255,255,255,0.8);
-  padding: 5px 10px;
-  border-radius: 6px;
-">
-  180 steps remaining
-</div>
 
-<div id="objects-left" style="
-  position:absolute; top:42px; right:10px; z-index:10;
-  font-size:16px; font-family:monospace; color:#222;
-  background:rgba(255,255,255,0.8); padding:5px 10px; border-radius:6px;
-  display:none;  /* hidden on welcome screen */
-">
-  16 objects left
-</div>
+    <div id="countdown-timer" style="
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      font-size: 16px;
+      font-family: monospace;
+      color: #222;
+      background: rgba(255,255,255,0.8);
+      padding: 5px 10px;
+      border-radius: 6px;
+    ">
+      180 steps remaining
+    </div>
+
+    <!-- adding toggle and axes -->
+    <label id="axes-toggle" style="
+      position:absolute; top:72px; right:10px; z-index:10;
+      font-size:14px; font-family:monospace; color:#222;
+      background:rgba(255,255,255,0.85); padding:5px 10px; border-radius:6px;
+      pointer-events:auto; /* checkbox remains clickable */
+    ">
+      <input type="checkbox" id="show-axes"> Show axes & angles
+    </label>
+
+    <div id="angles-hud" style="
+      position:absolute; top:104px; right:10px; z-index:10; min-width:220px;
+      font-size:14px; line-height:1.35; font-family:monospace; color:#222;
+      background:rgba(255,255,255,0.85); padding:8px 10px; border-radius:6px; display:none;
+      pointer-events:none; /* clicks pass through to canvas/buttons */
+    ">
+      <div><b>Yaw</b>: <span id="hud-yaw">–</span>°</div>
+      <div><b>Pitch</b>: <span id="hud-pitch">–</span>°</div>
+      <div><b>Roll</b>: <span id="hud-roll">–</span>°</div>
+      <div style="margin-top:4px; opacity:0.8">Last Δ</div>
+      <div>ΔYaw: <span id="hud-dyaw">–</span>°</div>
+      <div>ΔPitch: <span id="hud-dpitch">–</span>°</div>
+      <div>ΔRoll: <span id="hud-droll">–</span>°</div>
+      <div style="margin-top:6px; opacity:0.8">Legend: X=Red (pitch), Y=Green (yaw), Z=Blue (roll)</div>
+    </div>
+
+    <div id="objects-left" style="
+      position:absolute; top:42px; right:10px; z-index:10;
+      font-size:16px; font-family:monospace; color:#222;
+      background:rgba(255,255,255,0.8); padding:5px 10px; border-radius:6px;
+      display:none;  /* hidden on welcome screen */
+    ">
+      16 objects left
+    </div>
     <!-- canvas 自动由 renderer 添加 -->
   </div>
 
@@ -127,23 +154,20 @@
     <h2>Memory test: which of the following objects have you seen during the last block?</h2>
     <div id="shown-models-list"></div>
     <div id="shown-models-images" style="display: flex; flex-wrap: wrap; gap: 15px;"></div>
-
-
   </div>
 
   <div id="model-run-out" style="
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgb(0, 0, 0);
-  color: black;
-
-">
-  <h1 style="margin-bottom: 20px; color: white;">🎉 Thank you! You have finished all of those models!</h1>
-</div>
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0, 0, 0);
+    color: black;
+  ">
+    <h1 style="margin-bottom: 20px; color: white;">🎉 Thank you! You have finished all of those models!</h1>
+  </div>
 
   <!-- 模块切换逻辑 -->
   <script>
@@ -157,35 +181,57 @@
     if (window.updateObjectsLeftUI) window.updateObjectsLeftUI();
 
     document.getElementById('start-button').addEventListener('click', () => {
-    const enteredId = (document.getElementById('session-input')?.value || '').trim();
-    if (enteredId) {
-      // normalise to uppercase to avoid tiny typos looking like different IDs
-      localStorage.setItem('sessionId', enteredId.toUpperCase());
-    }
-    switchModule('main');
-    if (window.resetMainModule) window.resetMainModule();
-    setTimeout(() => window.loadNextModel && window.loadNextModel(), 100);
+      const enteredId = (document.getElementById('session-input')?.value || '').trim();
+      if (enteredId) {
+        // normalise to uppercase to avoid tiny typos looking like different IDs
+        localStorage.setItem('sessionId', enteredId.toUpperCase());
+      }
+      switchModule('main');
+      if (window.resetMainModule) window.resetMainModule();
+      // call the actual loader defined in main.js
+      setTimeout(() => window.loadRandomModel && window.loadRandomModel(), 100);
+    });
+
+    document.getElementById('restart-button')?.addEventListener('click', () => {
+      switchModule('main');
+      window.resetMainModule && window.resetMainModule();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const yawEl   = document.getElementById('goto-yaw');
+      const pitchEl = document.getElementById('goto-pitch');
+      const animateEl = document.getElementById('goto-animate');
+      const keepRollEl = document.getElementById('goto-keep-roll');
+      const errorEl = document.getElementById('goto-error');
+
+    document.getElementById('goto-apply')?.addEventListener('click', () => {
+      errorEl.style.display = 'none';
+      const yaw   = parseFloat(yawEl.value);
+      const pitch = parseFloat(pitchEl.value);
+      if (Number.isNaN(yaw) || Number.isNaN(pitch)) {
+        errorEl.textContent = 'Please enter valid numbers for yaw and pitch.';
+        errorEl.style.display = 'block';
+        return;
+      }
+      if (window.setYawPitch) {
+        window.setYawPitch(yaw, pitch, {
+          preserveRoll: keepRollEl.checked,
+          animate: animateEl.checked,
+          durationMs: 400
+        });
+      }
+    });
+
+    document.getElementById('goto-read')?.addEventListener('click', () => {
+      if (window.getCurrentYPR) {
+        const ypr = window.getCurrentYPR();
+        if (ypr) {
+          yawEl.value   = ypr.yaw.toFixed(2);
+          pitchEl.value = ypr.pitch.toFixed(2);
+        }
+      }
+    });
   });
-
-  document.getElementById('restart-button')?.addEventListener('click', () => {
-    switchModule('main');
-    window.resetMainModule && window.resetMainModule();
-  });
-
-    //document.getElementById('start-button').addEventListener('click', () => {
-      //switchModule('main');
-      //if (window.resetMainModule) window.resetMainModule();
-      //setTimeout(() => {
-        //if (window.loadNextModel) window.loadNextModel();
-      //}, 100); // 保证页面渲染完再开始加载模型和计时
-    //});
-
-    //document.getElementById('restart-button').addEventListener('click', () => {
-      
-      //switchModule('main');
-      //window.resetMainModule && window.resetMainModule();  // 调用重置函数
-    //});
-    
   </script>
 
   <!-- 启动 Three.js 主逻辑 -->

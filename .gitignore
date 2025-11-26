@@ -21,6 +21,9 @@ wifi_*.csv
 
 #backstage data
 record.csv
+exports/*csv
+exports/originaldata/*csv
+figs/
 
 # OS
 .DS_Store
