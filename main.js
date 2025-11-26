@@ -492,16 +492,42 @@ function generateFilename(groupId, suffix) {
   return `${groupId}_${suffix}.png`;
 }
 
-//Test use (temporary show button)
-const TEST_MODE = true;
+// //Test use (temporary show button)
+// //const TEST_MODE = true;
+
+// function updateStepCountdownUI() {
+//   const nextButton = document.getElementById('load-random-model');
+//     if (TEST_MODE || countdown <= 1) {
+//       nextButton.style.display = 'block';  // ✅ 显示按钮
+//     } else {
+//       nextButton.style.display = 'none';   // ✅ 隐藏按钮
+//     }
+//   const el = document.getElementById('countdown-timer');
+//   if (countdown <= 0) {
+//     el.textContent = `${countdown} steps remaining`;
+//     return;
+//   } else {
+//     countdown--;
+//     if (el) el.textContent = `${countdown} steps remaining`;
+//   }
+// }
+
 
 function updateStepCountdownUI() {
   const nextButton = document.getElementById('load-random-model');
+<<<<<<< Updated upstream
   if (countdown <= 1) {
     nextButton.style.display = 'block';  // ✅ 显示按钮
   } else {
     nextButton.style.display = 'none';   // ✅ 隐藏按钮
   }
+=======
+    if (countdown <= 1) {
+      nextButton.style.display = 'block';  // ✅ 显示按钮
+    } else {
+      nextButton.style.display = 'none';   // ✅ 隐藏按钮
+    }
+>>>>>>> Stashed changes
   const el = document.getElementById('countdown-timer');
   if (countdown <= 0) {
     el.textContent = `${countdown} steps remaining`;
