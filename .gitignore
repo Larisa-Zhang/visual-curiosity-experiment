@@ -18,9 +18,7 @@ screenshots/
 wifi_*.csv
 *.zip
 *.rar
-figs/
-exports/*.csv
-exports/original_data/*.csv
+
 #backstage data
 record.csv
 

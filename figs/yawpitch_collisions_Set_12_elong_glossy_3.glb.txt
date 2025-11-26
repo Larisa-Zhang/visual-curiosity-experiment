@@ -1,0 +1,464 @@
+MODEL = Set_12_elong_glossy_3.glb
+Total unique (yaw,pitch) points: 1666
+Found 101 collision location(s) where the same (yaw, pitch) mapped to multiple roll values.
+
+(yaw=0.0, pitch=0.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0          0.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0          0.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0          0.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0          0.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0          0.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0          0.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0          0.0                       180.0
+VCURIOSITY_30 record_VCURIOSITY_30_with_worldaxiscoord.csv         0        0.0          0.0                       180.0
+---
+(yaw=0.0, pitch=5.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0          5.0                      -180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0          5.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0          5.0                      -180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0          5.0                      -180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0          5.0                      -180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0          5.0                      -180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0          5.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         0        0.0          5.0                      -180.0
+---
+(yaw=0.0, pitch=10.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0         10.0                      -180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0         10.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         10.0                      -180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0         10.0                      -180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0         10.0                      -180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0         10.0                      -180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0         10.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         0        0.0         10.0                      -180.0
+---
+(yaw=0.0, pitch=15.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         15.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         15.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         15.0                         0.0
+ VCURIOSITY_9  record_VCURIOSITY_9_with_worldaxiscoord.csv         2        0.0         15.0                      -180.0
+ VCURIOSITY_9  record_VCURIOSITY_9_with_worldaxiscoord.csv         1        0.0         15.0                      -180.0
+---
+(yaw=0.0, pitch=20.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         20.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         20.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         20.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         20.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         20.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         20.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         20.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         20.0                         0.0
+---
+(yaw=0.0, pitch=25.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         25.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         25.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         25.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         25.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         25.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         25.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         25.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         25.0                         0.0
+---
+(yaw=0.0, pitch=30.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         30.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         30.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         30.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         30.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         30.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         30.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         30.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         30.0                         0.0
+---
+(yaw=0.0, pitch=35.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         35.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         35.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         35.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         35.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         35.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         35.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         35.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         35.0                         0.0
+---
+(yaw=0.0, pitch=40.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         40.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         40.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         40.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         40.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         40.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         40.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         40.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         40.0                         0.0
+---
+(yaw=0.0, pitch=45.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         45.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         45.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         45.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         45.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         45.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         45.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         45.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         45.0                         0.0
+---
+(yaw=0.0, pitch=50.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         50.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         50.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         50.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         50.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         50.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         50.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         50.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         50.0                         0.0
+---
+(yaw=0.0, pitch=55.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         55.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         55.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         55.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         55.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         55.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         55.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         55.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         55.0                         0.0
+---
+(yaw=0.0, pitch=60.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         60.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         60.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         60.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         60.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         60.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         60.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         60.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         60.0                         0.0
+---
+(yaw=0.0, pitch=65.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         65.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         65.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         65.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         65.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         65.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         65.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         65.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         65.0                         0.0
+---
+(yaw=0.0, pitch=70.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         70.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         70.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         70.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         70.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         70.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         70.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         70.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0         70.0                         0.0
+---
+(yaw=0.0, pitch=75.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         75.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1        0.0         75.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0         75.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         75.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0         75.0                      -180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         2        0.0         75.0                        -0.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1        0.0         75.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0         75.0                      -180.0
+---
+(yaw=0.0, pitch=80.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId    after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1 5.684342e-14         80.0                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         1 5.684342e-14         80.0                      -180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1 5.684342e-14         80.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1 5.684342e-14         80.0                      -180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1 5.684342e-14         80.0                      -180.0
+VCURIOSITY_23 record_VCURIOSITY_23_with_worldaxiscoord.csv         1 5.684342e-14         80.0                      -180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1 5.684342e-14         80.0                      -180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0 0.000000e+00         80.0                         0.0
+---
+(yaw=0.0, pitch=280.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId    after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1 5.684342e-14        280.0                       180.0
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0 5.684342e-14        280.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0 5.684342e-14        280.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1 5.684342e-14        280.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0 5.684342e-14        280.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0 5.684342e-14        280.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0 5.684342e-14        280.0                       180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1 5.684342e-14        280.0                       180.0
+---
+(yaw=0.0, pitch=285.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         1        0.0        285.0                       180.0
+VCURIOSITY_14 record_VCURIOSITY_14_with_worldaxiscoord.csv         3        0.0        285.0                       180.0
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        285.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        285.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        285.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        285.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        285.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        285.0                       180.0
+---
+(yaw=0.0, pitch=290.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        290.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        290.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        290.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        290.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        290.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        290.0                       180.0
+VCURIOSITY_27 record_VCURIOSITY_27_with_worldaxiscoord.csv         1        0.0        290.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        290.0                       180.0
+---
+(yaw=0.0, pitch=295.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        295.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        295.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        295.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        295.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        295.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        295.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        295.0                       180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0        295.0                        -0.0
+---
+(yaw=0.0, pitch=300.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        300.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        300.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        300.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        300.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        300.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        300.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        300.0                       180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0        300.0                        -0.0
+---
+(yaw=0.0, pitch=305.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        305.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        305.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        305.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        305.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        305.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        305.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        305.0                       180.0
+ VCURIOSITY_8  record_VCURIOSITY_8_with_worldaxiscoord.csv         0        0.0        305.0                        -0.0
+---
+(yaw=0.0, pitch=310.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        310.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        310.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        310.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        310.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        310.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        310.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        310.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        310.0                       180.0
+---
+(yaw=0.0, pitch=315.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        315.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        315.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        315.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        315.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        315.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        315.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        315.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        315.0                       180.0
+---
+(yaw=0.0, pitch=320.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        320.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        320.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        320.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        320.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        320.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        320.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        320.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        320.0                       180.0
+---
+(yaw=0.0, pitch=325.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        325.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        325.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        325.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        325.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        325.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        325.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        325.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        325.0                       180.0
+---
+(yaw=0.0, pitch=330.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        330.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        330.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        330.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        330.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        330.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        330.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        330.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        330.0                       180.0
+---
+(yaw=0.0, pitch=335.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        335.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        335.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        335.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        335.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        335.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        335.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        335.0                       180.0
+ VCURIOSITY_7  record_VCURIOSITY_7_with_worldaxiscoord.csv         0        0.0        335.0                       180.0
+---
+(yaw=0.0, pitch=340.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        340.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        340.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        340.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        340.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        340.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        340.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        340.0                       180.0
+VCURIOSITY_30 record_VCURIOSITY_30_with_worldaxiscoord.csv         0        0.0        340.0                       180.0
+---
+(yaw=0.0, pitch=345.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        345.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        345.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        345.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        345.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        345.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        345.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        345.0                       180.0
+VCURIOSITY_30 record_VCURIOSITY_30_with_worldaxiscoord.csv         0        0.0        345.0                       180.0
+---
+(yaw=0.0, pitch=350.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        350.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        350.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        350.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        350.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        350.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        350.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        350.0                       180.0
+VCURIOSITY_30 record_VCURIOSITY_30_with_worldaxiscoord.csv         0        0.0        350.0                       180.0
+---
+(yaw=0.0, pitch=355.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_15 record_VCURIOSITY_15_with_worldaxiscoord.csv         0        0.0        355.0                       180.0
+VCURIOSITY_19 record_VCURIOSITY_19_with_worldaxiscoord.csv         0        0.0        355.0                       180.0
+VCURIOSITY_20 record_VCURIOSITY_20_with_worldaxiscoord.csv         1        0.0        355.0                       180.0
+VCURIOSITY_21 record_VCURIOSITY_21_with_worldaxiscoord.csv         0        0.0        355.0                       180.0
+VCURIOSITY_22 record_VCURIOSITY_22_with_worldaxiscoord.csv         0        0.0        355.0                       180.0
+VCURIOSITY_24 record_VCURIOSITY_24_with_worldaxiscoord.csv         0        0.0        355.0                       180.0
+VCURIOSITY_25 record_VCURIOSITY_25_with_worldaxiscoord.csv         0        0.0        355.0                       180.0
+VCURIOSITY_30 record_VCURIOSITY_30_with_worldaxiscoord.csv         0        0.0        355.0                       180.0
+---
+(yaw=5.176738, pitch=329.56802) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         2   5.176738    329.56802                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         2   5.176738    329.56802                       180.0
+---
+(yaw=15.0, pitch=345.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_29 record_VCURIOSITY_29_with_worldaxiscoord.csv         0       15.0        345.0                         0.0
+ VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         3       15.0        345.0                       180.0
+---
+(yaw=15.176738, pitch=329.56802) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         2  15.176738    329.56802                      -180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         2  15.176738    329.56802                       180.0
+---
+(yaw=25.0, pitch=345.0) -> 2 unique roll values
+   sessionId                                 source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_4 record_VCURIOSITY_4_with_worldaxiscoord.csv         3       25.0        345.0                       180.0
+VCURIOSITY_5 record_VCURIOSITY_5_with_worldaxiscoord.csv         0       25.0        345.0                         0.0
+---
+(yaw=71.649891, pitch=64.526878) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1  71.649891    64.526878                      -180.0
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1  71.649891    64.526878                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1  71.649891    64.526878                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1  71.649891    64.526878                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0  71.649891    64.526878                         0.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         3  71.649891    64.526878                         0.0
+---
+(yaw=82.160861, pitch=65.665145) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1  82.160861    65.665145                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1  82.160861    65.665145                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0  82.160861    65.665145                         0.0
+---
+(yaw=93.283962, pitch=65.864916) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1  93.283962    65.864916                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1  93.283962    65.864916                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0  93.283962    65.864916                         0.0
+---
+(yaw=104.144036, pitch=65.103518) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 104.144036    65.103518                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 104.144036    65.103518                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 104.144036    65.103518                         0.0
+---
+(yaw=113.974861, pitch=63.463817) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 113.974861    63.463817                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 113.974861    63.463817                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 113.974861    63.463817                         0.0
+---
+(yaw=122.375588, pitch=61.095444) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 122.375588    61.095444                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 122.375588    61.095444                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 122.375588    61.095444                         0.0
+---
+(yaw=129.300849, pitch=58.161376) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 129.300849    58.161376                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 129.300849    58.161376                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 129.300849    58.161376                         0.0
+---
+(yaw=134.907585, pitch=54.803783) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 134.907585    54.803783                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 134.907585    54.803783                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 134.907585    54.803783                         0.0
+---
+(yaw=135.0, pitch=305.0) -> 2 unique roll values
+    sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         2      135.0        305.0                       180.0
+VCURIOSITY_13 record_VCURIOSITY_13_with_worldaxiscoord.csv         2      135.0        305.0                         0.0
+---
+(yaw=139.417883, pitch=51.133427) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 139.417883    51.133427                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 139.417883    51.133427                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 139.417883    51.133427                         0.0
+---
+(yaw=143.045716, pitch=47.232076) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 143.045716    47.232076                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 143.045716    47.232076                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 143.045716    47.232076                         0.0
+---
+(yaw=145.970698, pitch=43.158886) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 145.970698    43.158886                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 145.970698    43.158886                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 145.970698    43.158886                         0.0
+---
+(yaw=148.334684, pitch=38.956613) -> 2 unique roll values
+   sessionId                                  source_file  actionId  after_yaw  after_pitch  recovered_after_eulerZ_deg
+        2233 record_VCURIOSITY_10_with_worldaxiscoord.csv         1 148.334684    38.956613                      -180.0
+        2233 record_VCURIOSITY_12_with_worldaxiscoord.csv         1 148.334684    38.956613                      -180.0
+VCURIOSITY_4  record_VCURIOSITY_4_with_worldaxiscoord.csv         0 148.334684    38.956613                         0.0
+---
